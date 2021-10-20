@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "AppInsights": {
+      "commandName": "Project",
+      "environmentVariables": {
+      }
+    }
+  }
+}

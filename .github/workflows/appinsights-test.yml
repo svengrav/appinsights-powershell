@@ -1,0 +1,23 @@
+name: AppInsights Test
+on: [workflow_dispatch]
+
+env:
+  MODULE_NAME: AppInsights
+
+jobs:
+  build:
+    name: Test Stage
+    runs-on: windows-latest
+    steps:
+      - name: check out repository
+        uses: actions/checkout@v3
+
+      - name: build app
+        shell: pwsh
+        run: |
+          $Module = $env:MODULE_NAME
+          dotnet build .\src\AppInsights -o .\output\$Module\bin
+          
+      - name: perform tests
+        shell: pwsh
+        run: dotnet test .\src\AppInsights.Test -v q --no-build --logger:"console;verbosity=normal"

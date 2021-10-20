@@ -1,0 +1,45 @@
+name: AppInsights Deploy
+on: [workflow_dispatch]
+
+env:
+  MODULE_NAME: AppInsights
+
+jobs:
+  build:
+    name: Deploy Stage
+    runs-on: windows-latest
+    steps:
+      - name: check out repository
+        uses: actions/checkout@v3
+
+      - name: build artifact
+        shell: pwsh
+        run: |
+          $Module = $env:MODULE_NAME
+          $BuildNo = [int] $env:GITHUB_RUN_NUMBER + 1000
+          $Version = [System.Version]::new(1,0,$BuildNo)
+          Write-Host "Version: $Version"
+
+          dotnet build .\src\AppInsights -o .\output\$Module\bin
+
+          New-Item -Path .\output\$Module\ -ItemType Directory -Force
+          Copy-Item .\src\$Module.psd1 .\output\$Module\ -Force
+          Copy-Item .\src\$Module.psm1 .\output\$Module\ -Force
+
+          Update-ModuleManifest .\Output\$Module\$Module.psd1 -ModuleVersion $Version
+
+      - name: perform tests
+        shell: pwsh
+        run: dotnet test .\src\AppInsights.Test -v q --no-build --logger:"console;verbosity=normal"
+        
+      - name: upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.MODULE_NAME }}
+          path: output/${{ env.MODULE_NAME }}
+
+      - name: publish artifacts
+        shell: pwsh
+        run: |
+          $Module = $env:MODULE_NAME
+          Publish-Module -Path .\output\$Module -NuGetApiKey ${{ secrets.APPINSIGHTS_PSGALLERY }} -Verbose 
