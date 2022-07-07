@@ -19,7 +19,7 @@ namespace AppInsights.Extensions
                 if (!double.TryParse(entry.Value.ToString(), out double value))
                     throw new HashtableInvalidException("Value has to be from type double or int.");
 
-                dictionary.Add(entry.Key.ToString(), value);
+                dictionary.Add(CreateMeticKeyString(entry.Key), value);
             }
 
             return dictionary;
@@ -40,6 +40,9 @@ namespace AppInsights.Extensions
 
         private static string CreatePropertyValueString(object value)
             => value.ToString();
+
+        private static string CreateMeticKeyString(object key)
+            => "metric." + key.ToString().ToLower();
 
         private static string CreatePropertyKeyString(object key)
             => "property." + key.ToString().ToLower();
