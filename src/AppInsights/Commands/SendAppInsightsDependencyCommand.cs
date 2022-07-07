@@ -2,6 +2,7 @@
 using AppInsights.Telemetry;
 using Microsoft.ApplicationInsights.DataContracts;
 using System;
+using System.Collections;
 using System.Management.Automation;
 
 namespace AppInsights
@@ -50,6 +51,11 @@ namespace AppInsights
         public string Data { get; set; }
 
         [Parameter(
+            HelpMessage = "Optional dictionary with custom request metrics."
+        )]
+        public Hashtable Metrics { get; set; } = new Hashtable();
+
+        [Parameter(
             HelpMessage = "The datetime when telemetry was recorded. Default is UTC.Now."
         )]
         [Alias("StartTime")]
@@ -86,6 +92,7 @@ namespace AppInsights
                 .AddDuration(Duration)
                 .AddResultCode(ResultCode)
                 .AddProperties(Properties)
+                .AddMetrics(Metrics)
                 .AddCommandContext(CommandContext)
                 .Build();
     }

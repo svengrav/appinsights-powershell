@@ -32,6 +32,18 @@ namespace AppInsights.Telemetry
             return this;
         }
 
+        internal ExceptionTelemetryBuilder AddProblemId(string problemId)
+        {
+            _telemetry.ProblemId = problemId;
+            return this;
+        }
+
+        internal ExceptionTelemetryBuilder AddTimestamp(DateTimeOffset timestamp)
+        {
+            _telemetry.Timestamp = timestamp;
+            return this;
+        }
+
         internal ExceptionTelemetryBuilder AddSeverity(SeverityLevel severity)
         {
             _telemetry.SeverityLevel = severity;

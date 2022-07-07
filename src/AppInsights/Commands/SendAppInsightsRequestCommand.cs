@@ -42,6 +42,16 @@ namespace AppInsights
         public string ResponseCode { get; set; }
 
         [Parameter(
+            HelpMessage = "The source for the request telemetry."
+        )]
+        public string Source { get; set; }
+
+        [Parameter(
+            HelpMessage = "The url for the request telemetry."
+        )]
+        public string Url { get; set; }
+
+        [Parameter(
             HelpMessage = "Defines whether the request was successfully processed. Default is true."
         )]
         public bool Success { get; set; } = true;
@@ -73,6 +83,8 @@ namespace AppInsights
                 .Create(Name, Timestamp, Duration, ResponseCode, Success)
                 .AddDuration(Duration)
                 .AddId(Id)
+                .AddUrl(Url)
+                .AddSource(Source)
                 .AddProperties(Properties)
                 .AddMetrics(Metrics)
                 .AddCommandContext(CommandContext)

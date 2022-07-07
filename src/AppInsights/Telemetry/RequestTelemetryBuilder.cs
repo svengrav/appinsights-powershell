@@ -26,7 +26,7 @@ namespace AppInsights.Telemetry
             return this;
         }
 
-        internal RequestTelemetryBuilder AddStartTime(DateTimeOffset timestamp)
+        internal RequestTelemetryBuilder AddTimestamp(DateTimeOffset timestamp)
         {
             _telemetry.Timestamp = timestamp;
             return this;
@@ -41,6 +41,12 @@ namespace AppInsights.Telemetry
         internal RequestTelemetryBuilder AddId(string id)
         {
             _telemetry.Id = id;
+            return this;
+        }
+
+        internal RequestTelemetryBuilder AddSource(string source)
+        {
+            _telemetry.Source = source;
             return this;
         }
 
@@ -65,6 +71,12 @@ namespace AppInsights.Telemetry
         internal RequestTelemetryBuilder AddMetrics (Hashtable properties)
         {
             _telemetry.Metrics.MergeDictionary(properties.ToMetricDictionary());
+            return this;
+        }
+
+        internal RequestTelemetryBuilder AddUrl (string uri)
+        {
+            _telemetry.Url = new Uri(uri);
             return this;
         }
     }

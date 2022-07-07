@@ -14,8 +14,8 @@ PowerShell command used to track exceptions in application insights.
 
 ```
 Send-AppInsightsException [-Exception] <Exception> [-Metrics <Hashtable>] [-Message <String>]
- [-Success <Boolean>] [[-InstrumentationKey] <Guid>] [[-Properties] <Hashtable>] [-RoleName <String>]
- [-RoleInstance <String>] [<CommonParameters>]
+ [-Timestamp <DateTimeOffset>] [-Severity <SeverityLevel>] [-ProblemId <String>] [[-InstrumentationKey] <Guid>]
+ [[-Properties] <Hashtable>] [-RoleName <String>] [-RoleInstance <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -25,7 +25,7 @@ PowerShell command used to track exceptions in application insights.
 
 ### Example 1
 ```powershell
-Send-AppInsightsException  -Exception ([Exception]::new("Fruit is rotten")) -Message "It is an apple" -Properties @{ "Fruit" = "Apple" } -Metrics @{ "Weight" = 12 }
+Send-AppInsightsException -Exception ([Exception]::new("Fruit is rotten")) -Message "It is an apple" -Properties @{ "Fruit" = "Apple" } -Metrics @{ "Weight" = 12 } -Severity Information
 ```
 
 ## PARAMETERS
@@ -135,11 +135,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Success
-Defines whether the process was successfully processed. Default is true.
+### -ProblemId
+The exception problem ID.
 
 ```yaml
-Type: Boolean
+Type: String
 Parameter Sets: (All)
 Aliases:
 
@@ -150,8 +150,42 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Severity
+The message severity (Verbose, Information, Warning, Error, Critical). Default is Information.
+
+```yaml
+Type: SeverityLevel
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Timestamp
+The datetime when telemetry was recorded. Default is UTC.Now.
+
+```yaml
+Type: DateTimeOffset
+Parameter Sets: (All)
+Aliases: StartTime
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
+
+## INPUTS
+
+## OUTPUTS
 
 ## NOTES
 

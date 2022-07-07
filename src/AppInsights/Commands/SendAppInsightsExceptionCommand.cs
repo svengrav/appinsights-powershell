@@ -29,9 +29,20 @@ namespace AppInsights
         public string Message { get; set; } = "";
 
         [Parameter(
-            HelpMessage = "Defines whether the process was successfully processed. Default is true."
+            HelpMessage = "The datetime when telemetry was recorded. Default is UTC.Now."
         )]
-        public bool Success {get; set; } = true;
+        [Alias("StartTime")]
+        public DateTimeOffset Timestamp { get; set; } = DateTimeOffset.UtcNow;
+
+        [Parameter(
+            HelpMessage = "The message severity (Verbose, Information, Warning, Error, Critical). Default is Information."
+        )]
+        public SeverityLevel Severity { get; set; } = SeverityLevel.Information;
+
+        [Parameter(
+            HelpMessage = "The exception problem ID."
+        )]
+        public string ProblemId { get; set; }
 
         #endregion
 
@@ -56,6 +67,9 @@ namespace AppInsights
                 .AddMessage(Message)
                 .AddMetrics(Metrics)
                 .AddProperties(Properties)
+                .AddProblemId(ProblemId)
+                .AddTimestamp(Timestamp)
+                .AddSeverity(Severity)
                 .AddCommandContext(CommandContext)
                 .Build();
     }

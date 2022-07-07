@@ -2,6 +2,7 @@
 using AppInsights.Telemetry;
 using Microsoft.ApplicationInsights.DataContracts;
 using System;
+using System.Collections;
 using System.Management.Automation;
 
 namespace AppInsights
@@ -50,6 +51,11 @@ namespace AppInsights
         public string Message { get; set; }
 
         [Parameter(
+            HelpMessage = "Optional dictionary with custom request metrics."
+        )]
+        public Hashtable Metrics { get; set; } = new Hashtable();
+
+        [Parameter(
             HelpMessage = "Defines whether the process was successfully processed. Default is true."
         )]
         public bool Success {get; set; } = true;
@@ -79,6 +85,8 @@ namespace AppInsights
                 .AddProperties(Properties)
                 .AddSuccess(Success)
                 .AddCommandContext(CommandContext)
+                .AddMetrics(Metrics)
+                .AddMessage(Message)
                 .Build();
     }
 }

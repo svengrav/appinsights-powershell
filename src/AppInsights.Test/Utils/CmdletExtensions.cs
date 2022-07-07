@@ -1,4 +1,5 @@
 ﻿using AppInsights.Commands;
+using AppInsights.Extensions;
 
 namespace AppInsights.Test
 {
@@ -7,6 +8,7 @@ namespace AppInsights.Test
         public static CommandResult Exec(this AppInsightsBaseCommand cmdlet)
         {
             var commandResults = new CommandResult();
+            cmdlet.CommandContext = new CommandContext();
             cmdlet.CommandRuntime = new CommandRuntimeMock(commandResults);
             cmdlet.Execute();
 

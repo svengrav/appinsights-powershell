@@ -25,6 +25,8 @@ dotnet test .\src\AppInsights.Test
 # Install-Module -Name platyPS -Scope CurrentUser
 Import-Module -Name platyPS
 
+Import-Module ".\output\AppInsights\AppInsights.psd1" -Force 
+
 # New-MarkdownHelp -Module AppInsights -OutputFolder .\docs
 Update-MarkdownHelp -Path .\docs
 

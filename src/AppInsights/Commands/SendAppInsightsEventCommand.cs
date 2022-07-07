@@ -20,6 +20,12 @@ namespace AppInsights
         public string Name { get; set; }
 
         [Parameter(
+            HelpMessage = "The datetime when telemetry was recorded. Default is UTC.Now."
+        )]
+        [Alias("StartTime")]
+        public DateTimeOffset Timestamp { get; set; } = DateTimeOffset.UtcNow;
+
+        [Parameter(
             HelpMessage = "Optional dictionary with custom metrics."
         )]
         public Hashtable Metrics { get; set; } = new Hashtable();
@@ -45,6 +51,7 @@ namespace AppInsights
             => EventTelemetryBuilder
                 .Create(Name)
                 .AddProperties(Properties)
+                .AddTimestamp(Timestamp)
                 .AddMetrics(Metrics)
                 .AddCommandContext(CommandContext)
                 .Build();

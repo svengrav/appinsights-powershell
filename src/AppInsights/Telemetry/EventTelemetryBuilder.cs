@@ -32,6 +32,12 @@ namespace AppInsights.Telemetry
             return this;
         }
 
+        internal EventTelemetryBuilder AddTimestamp(DateTimeOffset timestamp)
+        {
+            _telemetry.Timestamp = timestamp;
+            return this;
+        }
+
         internal EventTelemetryBuilder AddMetrics (Hashtable properties)
         {
             _telemetry.Metrics.MergeDictionary(properties.ToMetricDictionary());
