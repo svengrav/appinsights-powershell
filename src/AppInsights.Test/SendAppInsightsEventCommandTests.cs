@@ -18,11 +18,9 @@ namespace AppInsights.Test
             // Arrange
             var eventTelemetryMock = TelemetryRepository.CreateEventTelemetry();
             var telemetryProcessorMock = new TelemetryProcessorMock();
-            var commandContext = new CommandContext();
 
             var command = new SendAppInsightsEventCommand();
 
-            command.CommandContext = new CommandContext();
             command.TelemetryProcessor = telemetryProcessorMock;
             command.InstrumentationKey = Guid.NewGuid();
             command.Properties = TelemetryRepository.PropertiesHashtable;

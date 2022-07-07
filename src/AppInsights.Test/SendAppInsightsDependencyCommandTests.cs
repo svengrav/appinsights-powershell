@@ -18,11 +18,9 @@ namespace AppInsights.Test
             // Arrange
             var dependencyTelemetryMock = TelemetryRepository.CreateDependencyTelemetry();
             var telemetryProcessorMock = new TelemetryProcessorMock();
-            var commandContext = new CommandContext();
 
             var command = new SendAppInsightsDependencyCommand();
 
-            command.CommandContext = new CommandContext();
             command.TelemetryProcessor = telemetryProcessorMock;
             command.InstrumentationKey = Guid.NewGuid();
             command.Properties = TelemetryRepository.PropertiesHashtable;

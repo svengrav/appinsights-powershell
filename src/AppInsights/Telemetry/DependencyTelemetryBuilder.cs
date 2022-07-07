@@ -57,9 +57,9 @@ namespace AppInsights.Telemetry
             return this;
         }
 
-        internal DependencyTelemetryBuilder AddMetrics (Hashtable properties)
+        internal DependencyTelemetryBuilder AddMetrics (Hashtable metrics)
         {
-            _telemetry.Metrics.MergeDictionary(properties.ToMetricDictionary());
+            _telemetry.Metrics.MergeDictionary(metrics.ToMetricDictionary());
             return this;
         }
     }

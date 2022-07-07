@@ -8,7 +8,7 @@ namespace AppInsights.Test
         public static CommandResult Exec(this AppInsightsBaseCommand cmdlet)
         {
             var commandResults = new CommandResult();
-            cmdlet.CommandContext = new CommandContext();
+            cmdlet.CommandContext = new CommandContext(new PowerShellAdapterMock());
             cmdlet.CommandRuntime = new CommandRuntimeMock(commandResults);
             cmdlet.Execute();
 

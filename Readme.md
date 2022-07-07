@@ -10,7 +10,7 @@ The module simplifies the interaction with Application Insights and offers some 
 - [AppInsights - PowerShell Gallery](https://www.powershellgallery.com/packages/AppInsights/)
 
 ## Features
-- Automatic capture of the calling command and its parameters.
+- Automatic capture of the command context and its parameters.
 - Natively supports PowerShell hashtables for properties and metrics.
 - Flexibility in the use of the Instrumentation Key. 
   - Enables the Instrumentation Key to be stored as an Environment Variable.

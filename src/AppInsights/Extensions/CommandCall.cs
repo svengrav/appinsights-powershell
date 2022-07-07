@@ -1,17 +1,19 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
 
 namespace AppInsights.Extensions
 {
     public class CommandCall
     {
-        public readonly string Command;
+        public readonly string Name;
+        
         public readonly int ScriptLineNumber;
 
         public string Arguments { get; private set; }
 
         public CommandCall(string name, int scriptLineNumber = 0)
         {
-            Command = name;
+            Name = name;
             ScriptLineNumber = scriptLineNumber;
         }
 
@@ -20,5 +22,13 @@ namespace AppInsights.Extensions
             Arguments = arguments;
             return this;
         }
+
+        public IDictionary<string, string> ToDictionary()
+            => new Dictionary<string, string>
+            {
+                { nameof(Name).ToLower(), Name },
+                { nameof(ScriptLineNumber).ToLower(), ScriptLineNumber.ToString()},
+                { nameof(Arguments).ToLower(), Arguments }
+            };
     }
 }

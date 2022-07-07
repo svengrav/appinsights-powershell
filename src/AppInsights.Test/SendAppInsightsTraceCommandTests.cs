@@ -18,11 +18,9 @@ namespace AppInsights.Test
             // Arrange
             var traceTelemetryMock = TelemetryRepository.CreateTraceTelemetry();
             var telemetryProcessorMock = new TelemetryProcessorMock();
-            var commandContext = new CommandContext();
 
             var command = new SendAppInsightsTraceCommand();
 
-            command.CommandContext = new CommandContext();
             command.TelemetryProcessor = telemetryProcessorMock;
             command.InstrumentationKey = Guid.NewGuid();
             command.Properties = TelemetryRepository.PropertiesHashtable;
@@ -46,11 +44,9 @@ namespace AppInsights.Test
             var traceTelemetryMock = TelemetryRepository.CreateTraceTelemetry();
 
             var telemetryProcessorMock = new TelemetryProcessorMock();
-            var commandContext = new CommandContext();
 
             var command = new SendAppInsightsTraceCommand();
 
-            command.CommandContext = new CommandContext();
             command.TelemetryProcessor = telemetryProcessorMock;
             command.InstrumentationKey = Guid.NewGuid();
             command.Properties = new Hashtable() { { new {}, "Property Value 1"} };

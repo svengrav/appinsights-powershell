@@ -1,7 +1,6 @@
 using AppInsights.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.ObjectModel;
-using System.Management.Automation;
+using System.Globalization;
 
 namespace AppInsights.Test
 {
@@ -12,27 +11,24 @@ namespace AppInsights.Test
         [TestMethod]
         public void a_command_context_is_created_by_ps_call_stack()
         {
-            var scriptBlockCommand = new { Command = "<ScriptBlock>", Arguments = "", ScriptLineNumber = 0 };
-            var artworkCommand = new { Command = "New-Artwork", Arguments = "Name=Apple", ScriptLineNumber = 5 };
-            var brushCommand = new { Command = "New-Brush", Arguments = "Color=Orange", ScriptLineNumber = 10 };
-
-            // Arrange
-            var commandCallStack = new Collection<PSObject>();
-            commandCallStack.Add(new PSObject(scriptBlockCommand));
-            commandCallStack.Add(new PSObject(artworkCommand));
-            commandCallStack.Add(new PSObject(brushCommand));
+            var powerShellHost = new PowerShellAdapterMock();
 
             // Act
-            var commandContext = CommandContextExtension.GetCommandContext(commandCallStack);
+            var commandContext = new CommandContext(powerShellHost);
 
             // Assert
-            Assert.AreEqual(brushCommand.Command, commandContext.GetCommandCall().Command);
-            Assert.AreEqual(brushCommand.Arguments, commandContext.GetCommandCall().Arguments);
-            Assert.AreEqual(brushCommand.ScriptLineNumber, commandContext.GetCommandCall().ScriptLineNumber);
+            Assert.AreEqual(powerShellHost.GetCommandCall(0), commandContext.GetCommandCall().Name);
+            Assert.AreEqual(powerShellHost.GetCommandCallArgumments(0), commandContext.GetCommandCall().Arguments);
+            Assert.AreEqual(powerShellHost.GetCommandCallScriptLineNumber(0), commandContext.GetCommandCall().ScriptLineNumber);
 
-            Assert.AreEqual(artworkCommand.Command, commandContext.GetCommandCall(1).Command);
-            Assert.AreEqual(artworkCommand.Arguments, commandContext.GetCommandCall(1).Arguments);
-            Assert.AreEqual(artworkCommand.ScriptLineNumber, commandContext.GetCommandCall(1).ScriptLineNumber);
+            Assert.AreEqual(powerShellHost.GetCommandCall(1), commandContext.GetCommandCall(1).Name);
+            Assert.AreEqual(powerShellHost.GetCommandCallArgumments(1), commandContext.GetCommandCall(1).Arguments);
+            Assert.AreEqual(powerShellHost.GetCommandCallScriptLineNumber(1), commandContext.GetCommandCall(1).ScriptLineNumber);
+
+            Assert.AreEqual(powerShellHost.GetHostCulture(), commandContext.GetHost().Culture);
+            Assert.AreEqual(powerShellHost.GetHostVersion(), commandContext.GetHost().Version);
+            Assert.AreEqual(powerShellHost.GetHostName(), commandContext.GetHost().Name);
+
         }
 
     }

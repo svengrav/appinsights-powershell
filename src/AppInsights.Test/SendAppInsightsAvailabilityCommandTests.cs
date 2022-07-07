@@ -21,7 +21,6 @@ namespace AppInsights.Test
 
             var command = new SendAppInsightsAvailabilityCommand();
 
-            command.CommandContext = new CommandContext();
             command.TelemetryProcessor = telemetryProcessorMock;
             command.Properties = TelemetryRepository.PropertiesHashtable;
             command.InstrumentationKey = Guid.NewGuid();

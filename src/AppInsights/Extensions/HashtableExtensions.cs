@@ -14,7 +14,7 @@ namespace AppInsights.Extensions
             var dictionary = new Dictionary<string, double>();
             foreach (DictionaryEntry entry in hashtable)
             {
-                ThrowIfKeyNotString(entry);
+                KeyIsTypeString(entry);
 
                 if (!double.TryParse(entry.Value.ToString(), out double value))
                     throw new HashtableInvalidException("Value has to be from type double or int.");
@@ -32,19 +32,24 @@ namespace AppInsights.Extensions
         {
             var dictionary = new Dictionary<string, string>();
             foreach (DictionaryEntry entry in hashtable)
-            {
-                ThrowIfKeyNotString(entry);
-
-                dictionary.Add(entry.Key.ToString(), entry.Value.ToString());
-            }
+                if (KeyIsTypeString(entry))
+                    dictionary.Add(CreatePropertyKeyString(entry.Key), CreatePropertyValueString(entry.Value));
 
             return dictionary;
         }
 
-        private static void ThrowIfKeyNotString(DictionaryEntry entry)
+        private static string CreatePropertyValueString(object value)
+            => value.ToString();
+
+        private static string CreatePropertyKeyString(object key)
+            => "property." + key.ToString().ToLower();
+
+        private static bool KeyIsTypeString(DictionaryEntry entry)
         {
             if (entry.Key.GetType() != typeof(string))
                 throw new HashtableInvalidException("Key has to be from type string.");
+
+            return true;
         }
     }
 }
