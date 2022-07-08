@@ -1,4 +1,5 @@
-﻿using AppInsights.ErrorRecords;
+﻿using AppInsights.Context;
+using AppInsights.ErrorRecords;
 using AppInsights.Exceptions;
 using AppInsights.Extensions;
 using AppInsights.Telemetry;
@@ -32,6 +33,11 @@ namespace AppInsights.Commands
             HelpMessage = "The role instance. Default is the machine name."
         )]
         public string RoleInstance { get; set; } = Environment.MachineName;
+
+        [Parameter(
+            HelpMessage = "Defines which level in the call stack is taken into account for the command context."
+        )]
+        public int ContextLevel { get; set; } = 0;
 
         internal protected CommandContext CommandContext { get; internal set; }
 
@@ -69,7 +75,7 @@ namespace AppInsights.Commands
 
         private void CreateCommandContext()
         {
-            CommandContext = this.GetCommandContext();
+            CommandContext = this.GetCommandContext(ContextLevel);
         }
 
         private protected void HandleException(Exception ex)

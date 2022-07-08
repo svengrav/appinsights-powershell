@@ -1,11 +1,10 @@
-﻿using AppInsights.Commands;
-using AppInsights.Telemetry;
+﻿using AppInsights.Telemetry;
 using Microsoft.ApplicationInsights.DataContracts;
 using System;
 using System.Collections;
 using System.Management.Automation;
 
-namespace AppInsights
+namespace AppInsights.Commands
 {
     [Cmdlet(VerbsCommunications.Send, "AppInsightsRequest")]
     public class SendAppInsightsRequestCommand : AppInsightsBaseCommand

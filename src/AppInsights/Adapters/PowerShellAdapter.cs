@@ -24,14 +24,18 @@ namespace AppInsights.Adapters
 
         public ICollection<PowerShellCommandCall> GetCallStack()
         {
+            var commandCallList = new List<PowerShellCommandCall>();
             var powerShellCallStack = _psCmdlet.InvokeCommand.InvokeScript("Get-PSCallStack");
             RemoveGetPSCallStackFromCallStack(powerShellCallStack);
 
-            foreach (var callStackFrame in powerShellCallStack)
-                CreatePowerShellCommandCall( callStackFrame);
+            foreach (var psObject in powerShellCallStack)
+                commandCallList.Add(CreatePowerShellCommandCall(CastToCallStackFrame(psObject)));
 
-            return powerShellCallStack;
+            return commandCallList;
         }
+
+        private static CallStackFrame CastToCallStackFrame(PSObject callStackFrame)
+            =>(CallStackFrame) callStackFrame.BaseObject;
 
         private static void RemoveGetPSCallStackFromCallStack(Collection<PSObject> callStack)
         {

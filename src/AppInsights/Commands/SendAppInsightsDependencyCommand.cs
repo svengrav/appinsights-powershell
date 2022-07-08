@@ -1,11 +1,10 @@
-﻿using AppInsights.Commands;
-using AppInsights.Telemetry;
+﻿using AppInsights.Telemetry;
 using Microsoft.ApplicationInsights.DataContracts;
 using System;
 using System.Collections;
 using System.Management.Automation;
 
-namespace AppInsights
+namespace AppInsights.Commands
 {
     [Cmdlet(VerbsCommunications.Send, "AppInsightsDependency")]
     public class SendAppInsightsDependencyCommand : AppInsightsBaseCommand
@@ -64,7 +63,7 @@ namespace AppInsights
         [Parameter(
             HelpMessage = "Defines whether the process was successfully processed. Default is true."
         )]
-        public bool Success {get; set; } = true;
+        public bool Success { get; set; } = true;
 
         #endregion
 
@@ -87,7 +86,7 @@ namespace AppInsights
         private DependencyTelemetry CreateDependencyTelemetry()
             => DependencyTelemetryBuilder
                 .Create(Type, Target, Name, Data)
-                .AddStartTime(Timestamp )
+                .AddStartTime(Timestamp)
                 .AddSuccess(Success)
                 .AddDuration(Duration)
                 .AddResultCode(ResultCode)

@@ -1,49 +1,54 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Management.Automation;
 using AppInsights.Adapters;
 using Microsoft.ApplicationInsights.Extensibility;
+using Newtonsoft.Json;
 
-namespace AppInsights.Extensions
+namespace AppInsights.Context
 {
     public class CommandContext : IExtension
-    {        
+    {
         private readonly IPowerShellAdapter _powerShellAdapter;
 
         private readonly ICollection<CommandCall> _callStack;
 
         private readonly CommandHost _commandHost;
 
-        private int _commandLevel = 0;
+        private int _contextLevel = 0;
 
-        public CommandContext(IPowerShellAdapter powerShellAdapter) {
+        public CommandContext(IPowerShellAdapter powerShellAdapter, int contextLevel = 0)
+        {
+            _contextLevel = contextLevel;
             _powerShellAdapter = powerShellAdapter;
             _callStack = CreateCallStack();
             _commandHost = new CommandHost(GetHostName(), GetHostVersion(), GetHostCulture());
         }
 
         public CommandCall GetCommandCall(int level = 0)
-            =>  _callStack.ElementAt(level);
+            => _callStack.ElementAt(level);
 
         public IExtension DeepClone()
             => null;
 
         public void Serialize(ISerializationWriter serializationWriter)
         {
-            serializationWriter.WriteProperty(_commandHost);
-            serializationWriter.WriteProperty(GetCommandCall(_commandLevel));
+            serializationWriter.WriteProperty("hostContext", ConvertToJson(GetHost()));
+            serializationWriter.WriteProperty("commandContext", ConvertToJson(GetCommandCall(_contextLevel)));
         }
 
         public CommandContext SetCommandLevel(int level)
         {
-            _commandLevel = level;
+            _contextLevel = level;
             return this;
         }
 
         public CommandHost GetHost()
             => _commandHost;
-             
+
+        private string ConvertToJson(object objectToConvert)
+            => JsonConvert.SerializeObject(objectToConvert);
+
         private ICollection<CommandCall> CreateCallStack()
         {
             var commandCallStack = new Collection<CommandCall>();
@@ -53,27 +58,18 @@ namespace AppInsights.Extensions
             return commandCallStack;
         }
 
-        private static CommandCall CreateCommandCall(PSObject powerShellCall)
-            => new CommandCall(GetCommandName(powerShellCall), GetScriptLineNumber(powerShellCall))
-                .AddArguments(GetCommandArguments(powerShellCall));
+        private static CommandCall CreateCommandCall(PowerShellCommandCall powerShellCall)
+            => new CommandCall(powerShellCall.Command, powerShellCall.ScriptLineNumber)
+                .AddArguments(powerShellCall.Arguments);
 
-        private string GetHostName() 
+        private string GetHostName()
             => _powerShellAdapter.GetHostName();
 
-        private string GetHostVersion() 
+        private string GetHostVersion()
             => _powerShellAdapter.GetHostVersion();
 
-        private string GetHostCulture() 
+        private string GetHostCulture()
             => _powerShellAdapter.GetHostCulture();
-
-        private static string GetCommandArguments(PSObject psObject)
-             => psObject.Properties["InvocationInfo"].Value.ToString();
-
-        private static string GetCommandName(PSObject psObject)
-            => psObject.Properties["Command"].Value.ToString();
-
-        private static int GetScriptLineNumber(PSObject psObject)
-            => (int)psObject.Properties["ScriptLineNumber"].Value;
 
     }
 }

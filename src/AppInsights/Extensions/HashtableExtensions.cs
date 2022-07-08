@@ -1,4 +1,5 @@
 ﻿using AppInsights.Exceptions;
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -12,14 +13,14 @@ namespace AppInsights.Extensions
         public static IDictionary<string, double> ToMetricDictionary(this Hashtable hashtable)
         {
             var dictionary = new Dictionary<string, double>();
-            foreach (DictionaryEntry entry in hashtable)
+            foreach (DictionaryEntry dictionaryEntry in hashtable)
             {
-                KeyIsTypeString(entry);
+                KeyIsOfTypeString(dictionaryEntry.Key);
 
-                if (!double.TryParse(entry.Value.ToString(), out double value))
+                if (!double.TryParse(dictionaryEntry.Value.ToString(), out double value))
                     throw new HashtableInvalidException("Value has to be from type double or int.");
 
-                dictionary.Add(CreateMeticKeyString(entry.Key), value);
+                dictionary.Add(CreateMeticKeyString(dictionaryEntry.Key), value);
             }
 
             return dictionary;
@@ -30,10 +31,13 @@ namespace AppInsights.Extensions
         /// </summary>
         public static IDictionary<string, string> ToPropertyDictionary(this Hashtable hashtable)
         {
-            var dictionary = new Dictionary<string, string>();
-            foreach (DictionaryEntry entry in hashtable)
-                if (KeyIsTypeString(entry))
-                    dictionary.Add(CreatePropertyKeyString(entry.Key), CreatePropertyValueString(entry.Value));
+            var dictionary = new Dictionary<string, string>()
+            {
+                { "customProperties", ConvertToJson(hashtable) }
+            };
+            //foreach (DictionaryEntry entry in hashtable)
+            //    if (KeyIsTypeString(entry))
+            //        dictionary.Add(CreatePropertyKeyString(entry.Key), CreatePropertyValueString(entry.Value));
 
             return dictionary;
         }
@@ -42,17 +46,20 @@ namespace AppInsights.Extensions
             => value.ToString();
 
         private static string CreateMeticKeyString(object key)
-            => "metric" + key.ToString().ToLower();
+            => key.ToString().ToLower();
 
         private static string CreatePropertyKeyString(object key)
-            => "property" + key.ToString().ToLower();
+            => key.ToString().ToLower();
 
-        private static bool KeyIsTypeString(DictionaryEntry entry)
+        private static bool KeyIsOfTypeString(object key)
         {
-            if (entry.Key.GetType() != typeof(string))
+            if (key.GetType() != typeof(string))
                 throw new HashtableInvalidException("Key has to be from type string.");
 
             return true;
         }
+
+        private static string ConvertToJson(object objectToConvert)
+            => JsonConvert.SerializeObject(objectToConvert);
     }
 }

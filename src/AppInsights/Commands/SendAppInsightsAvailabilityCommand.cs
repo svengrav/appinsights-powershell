@@ -1,11 +1,10 @@
-﻿using AppInsights.Commands;
-using AppInsights.Telemetry;
+﻿using AppInsights.Telemetry;
 using Microsoft.ApplicationInsights.DataContracts;
 using System;
 using System.Collections;
 using System.Management.Automation;
 
-namespace AppInsights
+namespace AppInsights.Commands
 {
     [Cmdlet(VerbsCommunications.Send, "AppInsightsAvailability")]
     public class SendAppInsightsAvailabilityCommand : AppInsightsBaseCommand
@@ -58,18 +57,18 @@ namespace AppInsights
         [Parameter(
             HelpMessage = "Defines whether the process was successfully processed. Default is true."
         )]
-        public bool Success {get; set; } = true;
+        public bool Success { get; set; } = true;
 
         #endregion Parameters
 
         protected override void ProcessRecord()
-        {   
+        {
             try
             {
                 WriteVerbose(BuildTraceVerboseMessage());
                 TelemetryProcessor.TrackAvailability(CreateAvailabilityTelemetry());
-            } 
-            catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 HandleException(ex);
             }

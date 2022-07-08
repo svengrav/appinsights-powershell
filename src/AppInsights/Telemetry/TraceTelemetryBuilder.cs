@@ -1,4 +1,5 @@
-﻿using AppInsights.Extensions;
+﻿using AppInsights.Context;
+using AppInsights.Extensions;
 using Microsoft.ApplicationInsights.DataContracts;
 using System.Collections;
 

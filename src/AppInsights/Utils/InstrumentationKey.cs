@@ -5,7 +5,8 @@ namespace AppInsights.Utils
 {
     internal class InstrumentationKey
     {
-        private const string INSTRUMENTATION_KEY = "AI_INSTRUMENTATION_KEY";
+        private const string INSTRUMENTATION_KEY_VARIABLE = "AI_INSTRUMENTATION_KEY";
+
         private readonly Guid _instrumentationKey;
 
         internal InstrumentationKey(Guid instrumentationKey)
@@ -18,7 +19,7 @@ namespace AppInsights.Utils
 
         private Guid TryGetEnviromentInstrumentationKey()
         {
-            if (Guid.TryParse(Environment.GetEnvironmentVariable(INSTRUMENTATION_KEY), out Guid instrumentationKey))
+            if (Guid.TryParse(Environment.GetEnvironmentVariable(INSTRUMENTATION_KEY_VARIABLE), out Guid instrumentationKey))
                 return instrumentationKey;
 
             throw new InstrumentationKeyInvalidException();

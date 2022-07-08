@@ -7,6 +7,8 @@ namespace AppInsights.Exceptions
     /// </summary>
     public class HashtableInvalidException : Exception
     {
+        public const int ERROR_CODE = 40150;
+
         public HashtableInvalidException(string message) : base(message)
         {
 
