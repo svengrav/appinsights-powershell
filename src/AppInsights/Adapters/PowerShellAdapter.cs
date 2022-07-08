@@ -13,13 +13,6 @@ namespace AppInsights.Adapters
             _psCmdlet = psCmdlet;
         }
 
-        public Collection<PSObject> GetCallStack()
-        {
-            var callStack = _psCmdlet.InvokeCommand.InvokeScript("Get-PSCallStack");
-            callStack.RemoveAt(0);
-            return callStack;
-        }
-
         public string GetHostName()
             => _psCmdlet.Host.Name;
 
@@ -28,5 +21,39 @@ namespace AppInsights.Adapters
 
         public string GetHostCulture()
             => _psCmdlet.Host.CurrentCulture.ToString();
+
+        public ICollection<PowerShellCommandCall> GetCallStack()
+        {
+            var powerShellCallStack = _psCmdlet.InvokeCommand.InvokeScript("Get-PSCallStack");
+            RemoveGetPSCallStackFromCallStack(powerShellCallStack);
+
+            foreach (var callStackFrame in powerShellCallStack)
+                CreatePowerShellCommandCall( callStackFrame);
+
+            return powerShellCallStack;
+        }
+
+        private static void RemoveGetPSCallStackFromCallStack(Collection<PSObject> callStack)
+        {
+            callStack.RemoveAt(0);
+        }
+
+        private PowerShellCommandCall CreatePowerShellCommandCall(CallStackFrame callStackFrame)
+            => new PowerShellCommandCall(GetCommandName(callStackFrame), 
+                GetScriptLineNumber(callStackFrame), 
+                GetLocation(callStackFrame), 
+                GetArgumentDictionary(callStackFrame));
+
+        private string GetCommandName(CallStackFrame callStackFrame)
+            => callStackFrame.InvocationInfo.MyCommand.Name;
+
+        private int GetScriptLineNumber(CallStackFrame callStackFrame)
+            => callStackFrame.InvocationInfo.ScriptLineNumber;
+
+        private string GetLocation(CallStackFrame callStackFrame)
+            => callStackFrame.GetScriptLocation();
+
+        private Dictionary<string, object> GetArgumentDictionary(CallStackFrame callStackFrame)
+            => callStackFrame.InvocationInfo.BoundParameters;
     }
 }

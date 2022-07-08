@@ -1,9 +1,9 @@
 ﻿
-using System.Collections.Generic;
+using Microsoft.ApplicationInsights.Extensibility;
 
 namespace AppInsights.Extensions
 {
-    public class CommandCall
+    public class CommandCall : ISerializableWithWriter
     {
         public readonly string Name;
         
@@ -23,12 +23,11 @@ namespace AppInsights.Extensions
             return this;
         }
 
-        public IDictionary<string, string> ToDictionary()
-            => new Dictionary<string, string>
-            {
-                { nameof(Name).ToLower(), Name },
-                { nameof(ScriptLineNumber).ToLower(), ScriptLineNumber.ToString()},
-                { nameof(Arguments).ToLower(), Arguments }
-            };
+        public void Serialize(ISerializationWriter serializationWriter)
+        {
+            serializationWriter.WriteProperty("command" + nameof(Name), Name);
+            serializationWriter.WriteProperty("command" + nameof(ScriptLineNumber), ScriptLineNumber.ToString());
+            serializationWriter.WriteProperty("command" + nameof(Arguments), Arguments);
+        }
     }
 }

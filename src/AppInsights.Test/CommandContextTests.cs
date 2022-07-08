@@ -11,23 +11,23 @@ namespace AppInsights.Test
         [TestMethod]
         public void a_command_context_is_created_by_ps_call_stack()
         {
-            var powerShellHost = new PowerShellAdapterMock();
+            var powerShellAdapterMock = new PowerShellAdapterMock();
 
             // Act
-            var commandContext = new CommandContext(powerShellHost);
+            var commandContext = new CommandContext(powerShellAdapterMock);
 
             // Assert
-            Assert.AreEqual(powerShellHost.GetCommandCall(0), commandContext.GetCommandCall().Name);
-            Assert.AreEqual(powerShellHost.GetCommandCallArgumments(0), commandContext.GetCommandCall().Arguments);
-            Assert.AreEqual(powerShellHost.GetCommandCallScriptLineNumber(0), commandContext.GetCommandCall().ScriptLineNumber);
+            Assert.AreEqual(powerShellAdapterMock.GetCommandCall(0), commandContext.GetCommandCall().Name);
+            Assert.AreEqual(powerShellAdapterMock.GetCommandCallArgumments(0), commandContext.GetCommandCall().Arguments);
+            Assert.AreEqual(powerShellAdapterMock.GetCommandCallScriptLineNumber(0), commandContext.GetCommandCall().ScriptLineNumber);
 
-            Assert.AreEqual(powerShellHost.GetCommandCall(1), commandContext.GetCommandCall(1).Name);
-            Assert.AreEqual(powerShellHost.GetCommandCallArgumments(1), commandContext.GetCommandCall(1).Arguments);
-            Assert.AreEqual(powerShellHost.GetCommandCallScriptLineNumber(1), commandContext.GetCommandCall(1).ScriptLineNumber);
+            Assert.AreEqual(powerShellAdapterMock.GetCommandCall(1), commandContext.GetCommandCall(1).Name);
+            Assert.AreEqual(powerShellAdapterMock.GetCommandCallArgumments(1), commandContext.GetCommandCall(1).Arguments);
+            Assert.AreEqual(powerShellAdapterMock.GetCommandCallScriptLineNumber(1), commandContext.GetCommandCall(1).ScriptLineNumber);
 
-            Assert.AreEqual(powerShellHost.GetHostCulture(), commandContext.GetHost().Culture);
-            Assert.AreEqual(powerShellHost.GetHostVersion(), commandContext.GetHost().Version);
-            Assert.AreEqual(powerShellHost.GetHostName(), commandContext.GetHost().Name);
+            Assert.AreEqual(powerShellAdapterMock.GetHostCulture(), commandContext.GetHost().Culture);
+            Assert.AreEqual(powerShellAdapterMock.GetHostVersion(), commandContext.GetHost().Version);
+            Assert.AreEqual(powerShellAdapterMock.GetHostName(), commandContext.GetHost().Name);
 
         }
 

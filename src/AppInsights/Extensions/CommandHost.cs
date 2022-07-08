@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.ApplicationInsights.Extensibility;
 
 namespace AppInsights.Extensions
 {
-    public class CommandHost
+    public class CommandHost : ISerializableWithWriter
     {
         public string Name;
 
@@ -17,12 +17,11 @@ namespace AppInsights.Extensions
             Culture = culture;
         }
 
-        public IDictionary<string, string> ToDictionary()
-            => new Dictionary<string, string>
-            {
-                { nameof(Name).ToLower(), Name },
-                { nameof(Version).ToLower(), Version},
-                { nameof(Culture).ToLower(), Culture }
-            };
+        public void Serialize(ISerializationWriter serializationWriter)
+        {
+            serializationWriter.WriteProperty("host" + nameof(Name), Name);
+            serializationWriter.WriteProperty("host" + nameof(Version), Version);
+            serializationWriter.WriteProperty("host" + nameof(Culture), Culture);
+        }
     }
 }

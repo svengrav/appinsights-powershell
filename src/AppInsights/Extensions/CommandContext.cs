@@ -17,8 +17,6 @@ namespace AppInsights.Extensions
 
         private int _commandLevel = 0;
 
-        public CommandCall Command => _callStack.ElementAt(_commandLevel);
-
         public CommandContext(IPowerShellAdapter powerShellAdapter) {
             _powerShellAdapter = powerShellAdapter;
             _callStack = CreateCallStack();
@@ -33,8 +31,8 @@ namespace AppInsights.Extensions
 
         public void Serialize(ISerializationWriter serializationWriter)
         {
-            serializationWriter.WriteProperty("host", _commandHost.ToDictionary());
-            serializationWriter.WriteProperty("command", GetCommandCall(_commandLevel).ToDictionary());
+            serializationWriter.WriteProperty(_commandHost);
+            serializationWriter.WriteProperty(GetCommandCall(_commandLevel));
         }
 
         public CommandContext SetCommandLevel(int level)
@@ -69,13 +67,13 @@ namespace AppInsights.Extensions
             => _powerShellAdapter.GetHostCulture();
 
         private static string GetCommandArguments(PSObject psObject)
-             => psObject.Properties["Arguments"].Value.ToString();
+             => psObject.Properties["InvocationInfo"].Value.ToString();
 
-        private static string GetCommandName(PSObject commanCall)
-            => commanCall.Properties["Command"].Value.ToString();
+        private static string GetCommandName(PSObject psObject)
+            => psObject.Properties["Command"].Value.ToString();
 
-        private static int GetScriptLineNumber(PSObject commanCall)
-            => (int)commanCall.Properties["ScriptLineNumber"].Value;
+        private static int GetScriptLineNumber(PSObject psObject)
+            => (int)psObject.Properties["ScriptLineNumber"].Value;
 
     }
 }

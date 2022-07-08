@@ -42,10 +42,10 @@ namespace AppInsights.Extensions
             => value.ToString();
 
         private static string CreateMeticKeyString(object key)
-            => "metric." + key.ToString().ToLower();
+            => "metric" + key.ToString().ToLower();
 
         private static string CreatePropertyKeyString(object key)
-            => "property." + key.ToString().ToLower();
+            => "property" + key.ToString().ToLower();
 
         private static bool KeyIsTypeString(DictionaryEntry entry)
         {

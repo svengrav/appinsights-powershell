@@ -1,11 +1,11 @@
-﻿using System.Collections.ObjectModel;
-using System.Management.Automation;
+﻿
+using System.Collections.Generic;
 
 namespace AppInsights.Adapters
 {
     public interface IPowerShellAdapter
     {
-        Collection<PSObject> GetCallStack();
+        ICollection<PowerShellCommandCall> GetCallStack();
         string GetHostCulture();
         string GetHostName();
         string GetHostVersion();
