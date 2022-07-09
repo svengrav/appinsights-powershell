@@ -45,7 +45,6 @@ namespace AppInsights.Telemetry
             return this;
         }
 
-
         internal DependencyTelemetryBuilder AddDuration(TimeSpan duration)
         {
             _telemetry.Duration = duration;
