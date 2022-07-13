@@ -51,9 +51,7 @@ Overview and documentation of currently supported commands.
 - [Send-AppInsightsException](./docs/Send-AppInsightsException.md)
 - [Send-AppInsightsAvailability](./docs/Send-AppInsightsAvailability.md)
 - [Send-AppInsightsRequest](./docs/Send-AppInsightsRequest.md)
-- [Send-AppInsightsOperation](./docs/Send-AppInsightsOperation.md) (Experimental 🚧)
-
-
+- 
 ## Notes
 - The module works for PowerShell 5 and PowerShell 7.
 - The module is based on Microsoft.ApplicationInsights (2.18.0). This version is tagged as deprecated but 
@@ -65,10 +63,4 @@ The context of a command is automatically captured. This means:
 - The invoking command and its parameters, arguments and the script line no. are captured.
 - Custom properties are also structured and identified by a property prefix.
 - Metrics are structured and identified by a metric prefix.
-
-## Application Map (Experimental 🚧)
-**Please dont use this in production** 
-
-With the command "Send-AppInsightsOperation", a dependency and a request can be combined to display an application map. In this way, the dependencies can be displayed in a module.
-
-![OperationSample1](./docs/images/SampleOperation1.png)
+- **To disable it use the -DisableContext switch**.
