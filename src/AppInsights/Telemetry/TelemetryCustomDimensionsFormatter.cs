@@ -1,5 +1,6 @@
 ﻿using Microsoft.ApplicationInsights.Extensibility;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 
@@ -115,6 +116,11 @@ namespace AppInsights.Telemetry
         }
 
         private string ConvertToJson(object objectToConvert)
-            => JsonConvert.SerializeObject(objectToConvert);
+            => JsonConvert.SerializeObject(objectToConvert, new JsonSerializerSettings()
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                MaxDepth = 5
+            });
     }
 }

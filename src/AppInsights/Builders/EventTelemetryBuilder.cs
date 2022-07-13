@@ -14,7 +14,7 @@ namespace AppInsights.Builders
         private EventTelemetryBuilder(string eventName)
         {
             _telemetry = new EventTelemetry(eventName);
-            _telemetry.Extension = _customDimensions;
+            _telemetry.Extension = _customDimensions.GetFormatter();
         }
 
         internal static EventTelemetryBuilder Create(string eventName)

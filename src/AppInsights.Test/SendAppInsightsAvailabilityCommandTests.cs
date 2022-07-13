@@ -1,7 +1,6 @@
 ﻿using AppInsights.Commands;
 using AppInsights.Test.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 using System;
 
 namespace AppInsights.Test
@@ -47,7 +46,7 @@ namespace AppInsights.Test
             var availabilityTelemetryMock = TelemetryRepository.CreateAvailabilityTelemetry();
             var telemetryProcessorMock = new TelemetryProcessorMock();
             var serializationWriterMock = new SerializationWriterMock();
-            var metricJsonString = JsonConvert.SerializeObject(TelemetryRepository.MetricsHashtable);
+            var metricJsonString = JsonConvert.ConvertToJson(TelemetryRepository.MetricsHashtable);
 
             var command = new SendAppInsightsAvailabilityCommand();
 
@@ -64,7 +63,7 @@ namespace AppInsights.Test
             telemetryProcessorMock.AvailabilityTelemetry.Extension.Serialize(serializationWriterMock);
 
             Assert.AreEqual(availabilityTelemetryMock.Name, telemetryProcessorMock.AvailabilityTelemetry.Name);
-            Assert.AreEqual(metricJsonString, serializationWriterMock.StringProperties["custom_metrics"]);
+            Assert.AreEqual(metricJsonString, serializationWriterMock.StringProperties["customMetrics"]);
         }
     }
 }

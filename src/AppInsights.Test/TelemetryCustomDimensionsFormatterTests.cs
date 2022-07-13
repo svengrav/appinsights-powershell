@@ -42,7 +42,7 @@ namespace AppInsights.Test
             var serializationWriterMock = new SerializationWriterMock();
             var customDimensionsFormatter = new TelemetryCustomDimensionsFormatter();
             var complexObjectMock = new { Name = "test_name", Age = 20 };
-            var complexObjectJsonMock = JsonConvert.SerializeObject(complexObjectMock);
+            var complexObjectJsonMock = JsonConvert.ConvertToJson(complexObjectMock);
 
             // Act
             customDimensionsFormatter.AddCustomProperty("type_complex", complexObjectMock);

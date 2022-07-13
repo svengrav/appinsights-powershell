@@ -14,7 +14,7 @@ namespace AppInsights.Builders
         private ExceptionTelemetryBuilder(Exception exception)
         {
             _telemetry = new ExceptionTelemetry(exception);
-            _telemetry.Extension = _customDimensions;
+            _telemetry.Extension = _customDimensions.GetFormatter();
         }
 
         internal static ExceptionTelemetryBuilder Create(Exception exception)

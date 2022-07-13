@@ -14,7 +14,7 @@ namespace AppInsights.Builders
         private RequestTelemetryBuilder(string name, DateTimeOffset startTime, TimeSpan duration, string responseCode, bool success)
         {
             _telemetry = new RequestTelemetry(name, startTime, duration, responseCode, success);
-            _telemetry.Extension = _customDimensions;
+            _telemetry.Extension = _customDimensions.GetFormatter();
         }
 
         internal static RequestTelemetryBuilder Create(string name, DateTimeOffset startTime, TimeSpan duration, string responseCode, bool success)

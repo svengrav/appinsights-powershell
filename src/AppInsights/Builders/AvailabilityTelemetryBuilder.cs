@@ -14,7 +14,7 @@ namespace AppInsights.Builders
         private AvailabilityTelemetryBuilder(string name, DateTimeOffset timeStamp, TimeSpan duration, string runLocation)
         {
             _telemetry = new AvailabilityTelemetry(name, timeStamp, duration, runLocation, true);
-            _telemetry.Extension = _customDimensions;
+            _telemetry.Extension = _customDimensions.GetFormatter();
         }
 
         internal static AvailabilityTelemetryBuilder Create(string name, DateTimeOffset timeStamp, TimeSpan duration, string runLocation)

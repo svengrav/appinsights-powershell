@@ -80,7 +80,6 @@ namespace AppInsights.Telemetry
             {
                 ConnectionString = $"InstrumentationKey={instrumentationKey.GetKey()}",
             };
-            options.TelemetryChannel.DeveloperMode = true;
             return options;
         }
     }

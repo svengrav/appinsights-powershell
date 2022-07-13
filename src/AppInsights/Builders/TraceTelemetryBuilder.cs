@@ -13,7 +13,7 @@ namespace AppInsights.Builders
         private TraceTelemetryBuilder(string message)
         {
             _telemetry = new TraceTelemetry(message);
-            _telemetry.Extension = _customDimensions;
+            _telemetry.Extension = _customDimensions.GetFormatter();
         }
 
         internal static TraceTelemetryBuilder Create(string message)

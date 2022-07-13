@@ -12,7 +12,7 @@ Send-AppInsightsException  -Exception ([Exception]::new("Fruit is rotten")) -Mes
 # Events
 Send-AppInsightsEvent "AppleOrderd" 
 Send-AppInsightsEvent -EventName "AppleOrderd" -Properties @{ "Fruit" = "Apple";  "Type" = "Granny Smith" } -InstrumentationKey $env:AI_INSTRUMENTATION_KEY
-Send-AppInsightsEvent -EventName "OrangeOrderd" -Properties @{ "Fruit" = "Orange";  "Type" = "Granny Smith" } -Metrics @{ "Weight" = 12 }  -Timestamp (Get-AzDataBoxEdgeRole)
+Send-AppInsightsEvent -EventName "OrangeOrderd" -Properties @{ "Fruit" = "Orange";  "Type" = "Granny Smith" } -Metrics @{ "Weight" = 12 }  -Timestamp (Get-Date)
 Send-AppInsightsEvent -EventName "OrangeOrderd" -ContextLevel 2
 
 # Request
@@ -26,5 +26,5 @@ Send-AppInsightsDependency -Type "FruitDependency" -Name "Apple" -Target "AppleS
 Send-AppInsightsDependency -Type "FruitDependency" -Name "Apple" -Target "AppleStore" -Data "Apple Order" -StartTime (Get-Date) -Success $false -Duration (New-TimeSpan -Seconds 30) -ResultCode OK
 
 # Availability
-Send-AppInsightsAvailability -Name "Apple Availability" -Id "AppleID" -Timestamp (Get-Date) -Duration (New-TimeSpan -Seconds 5) -RunLocation $env:COMPUTERNAME -Message "Apple!" -Success $true #
+Send-AppInsightsAvailability -Name "Apple Availability" -Id "AppleID" -Timestamp (Get-Date) -Duration (New-TimeSpan -Seconds 5) -RunLocation $env:COMPUTERNAME -Message "Apple!" -Success $true 
 Send-AppInsightsAvailability -Name "Apple Availability" -Id "AppleID" -Timestamp (Get-Date) -Duration (New-TimeSpan -Seconds 5) -RunLocation $env:COMPUTERNAME -Message "Apple!" -Success $true 

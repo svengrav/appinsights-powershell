@@ -14,7 +14,7 @@ namespace AppInsights.Builders
         private DependencyTelemetryBuilder(string dependencyTypeName, string target, string dependencyName, string data)
         {
             _telemetry = new DependencyTelemetry(dependencyTypeName, target, dependencyName, data);
-            _telemetry.Extension = _customDimensions;
+            _telemetry.Extension = _customDimensions.GetFormatter();
         }
 
         internal static DependencyTelemetryBuilder Create(string dependencyTypeName, string target, string dependencyName, string data)
