@@ -1,11 +1,10 @@
-﻿using AppInsights.Commands;
-using AppInsights.Telemetry;
+﻿using AppInsights.Builders;
 using Microsoft.ApplicationInsights.DataContracts;
 using System;
 using System.Collections;
 using System.Management.Automation;
 
-namespace AppInsights
+namespace AppInsights.Commands
 {
     [Cmdlet(VerbsCommunications.Send, "AppInsightsException")]
     public class SendAppInsightsExceptionCommand : AppInsightsBaseCommand
@@ -29,9 +28,20 @@ namespace AppInsights
         public string Message { get; set; } = "";
 
         [Parameter(
-            HelpMessage = "Defines whether the process was successfully processed. Default is true."
+            HelpMessage = "The datetime when telemetry was recorded. Default is UTC.Now."
         )]
-        public bool Success {get; set; } = true;
+        [Alias("StartTime")]
+        public DateTimeOffset Timestamp { get; set; } = DateTimeOffset.UtcNow;
+
+        [Parameter(
+            HelpMessage = "The message severity (Verbose, Information, Warning, Error, Critical). Default is Information."
+        )]
+        public SeverityLevel Severity { get; set; } = SeverityLevel.Information;
+
+        [Parameter(
+            HelpMessage = "The exception problem ID."
+        )]
+        public string ProblemId { get; set; }
 
         #endregion
 
@@ -52,11 +62,15 @@ namespace AppInsights
             => $"Track Exception (Exception={Exception.Message}; PropertyCount={Properties.Count}; MetricCount={Metrics.Count})";
 
         private ExceptionTelemetry CreateExceptionTelemetry()
-            => ExceptionTelemetryBuilder.Create(Exception)
+            => ExceptionTelemetryBuilder
+                .Create(Exception)
+                .AddPowerShellContext(HostContext, CommandContext)
                 .AddMessage(Message)
                 .AddMetrics(Metrics)
                 .AddProperties(Properties)
-                .AddCommandContext(CommandContext)
+                .AddProblemId(ProblemId)
+                .AddTimestamp(Timestamp)
+                .AddSeverity(Severity)
                 .Build();
     }
 }

@@ -1,11 +1,10 @@
-﻿using AppInsights.Commands;
-using AppInsights.Telemetry;
+﻿using AppInsights.Builders;
 using Microsoft.ApplicationInsights.DataContracts;
 using System;
 using System.Collections;
 using System.Management.Automation;
 
-namespace AppInsights
+namespace AppInsights.Commands
 {
     [Cmdlet(VerbsCommunications.Send, "AppInsightsRequest")]
     public class SendAppInsightsRequestCommand : AppInsightsBaseCommand
@@ -42,6 +41,16 @@ namespace AppInsights
         public string ResponseCode { get; set; }
 
         [Parameter(
+            HelpMessage = "The source for the request telemetry."
+        )]
+        public string Source { get; set; }
+
+        [Parameter(
+            HelpMessage = "The url for the request telemetry."
+        )]
+        public string Url { get; set; }
+
+        [Parameter(
             HelpMessage = "Defines whether the request was successfully processed. Default is true."
         )]
         public bool Success { get; set; } = true;
@@ -71,11 +80,13 @@ namespace AppInsights
         private RequestTelemetry CreateRequestTelemetry()
             => RequestTelemetryBuilder
                 .Create(Name, Timestamp, Duration, ResponseCode, Success)
+                .AddPowerShellContext(HostContext, CommandContext)
                 .AddDuration(Duration)
                 .AddId(Id)
+                .AddUrl(Url)
+                .AddSource(Source)
                 .AddProperties(Properties)
                 .AddMetrics(Metrics)
-                .AddCommandContext(CommandContext)
                 .Build();
     }
 }

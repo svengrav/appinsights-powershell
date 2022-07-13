@@ -1,10 +1,10 @@
-﻿using AppInsights.Commands;
-using AppInsights.Telemetry;
+﻿using AppInsights.Builders;
 using Microsoft.ApplicationInsights.DataContracts;
 using System;
+using System.Collections;
 using System.Management.Automation;
 
-namespace AppInsights
+namespace AppInsights.Commands
 {
     [Cmdlet(VerbsCommunications.Send, "AppInsightsDependency")]
     public class SendAppInsightsDependencyCommand : AppInsightsBaseCommand
@@ -50,6 +50,11 @@ namespace AppInsights
         public string Data { get; set; }
 
         [Parameter(
+            HelpMessage = "Optional dictionary with custom request metrics."
+        )]
+        public Hashtable Metrics { get; set; } = new Hashtable();
+
+        [Parameter(
             HelpMessage = "The datetime when telemetry was recorded. Default is UTC.Now."
         )]
         [Alias("StartTime")]
@@ -58,7 +63,7 @@ namespace AppInsights
         [Parameter(
             HelpMessage = "Defines whether the process was successfully processed. Default is true."
         )]
-        public bool Success {get; set; } = true;
+        public bool Success { get; set; } = true;
 
         #endregion
 
@@ -81,12 +86,13 @@ namespace AppInsights
         private DependencyTelemetry CreateDependencyTelemetry()
             => DependencyTelemetryBuilder
                 .Create(Type, Target, Name, Data)
-                .AddStartTime(Timestamp )
+                .AddPowerShellContext(HostContext, CommandContext)
+                .AddStartTime(Timestamp)
                 .AddSuccess(Success)
                 .AddDuration(Duration)
                 .AddResultCode(ResultCode)
                 .AddProperties(Properties)
-                .AddCommandContext(CommandContext)
+                .AddMetrics(Metrics)
                 .Build();
     }
 }

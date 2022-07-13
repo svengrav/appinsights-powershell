@@ -1,8 +1,7 @@
-﻿using System;
-using Microsoft.ApplicationInsights.Extensibility;
-using Microsoft.ApplicationInsights;
+﻿using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.DataContracts;
-using AppInsights.Utils;
+using Microsoft.ApplicationInsights.Extensibility;
+using System;
 
 namespace AppInsights.Telemetry
 {
@@ -12,7 +11,7 @@ namespace AppInsights.Telemetry
         private readonly string _roleName;
         private readonly string _roleInstance;
 
-        public TelemetryProcessor(InstrumentationKey instrumentationKey, string roleName = null, string roleInstance = null)
+        public TelemetryProcessor(TelemetryInstrumentationKey instrumentationKey, string roleName = null, string roleInstance = null)
         {
             _roleName = roleName ?? Environment.MachineName;
             _roleInstance = roleInstance ?? Environment.MachineName;
@@ -61,7 +60,7 @@ namespace AppInsights.Telemetry
             _telemetryClient.Flush();
         }
 
-        private TelemetryClient CreateTelemetryClient(InstrumentationKey instrumentationKey)
+        private TelemetryClient CreateTelemetryClient(TelemetryInstrumentationKey instrumentationKey)
         {
             var telemetryClient = new TelemetryClient(CreateTelemetryConfiguration(instrumentationKey));
             AssignTelemetryClientRoles(telemetryClient);
@@ -75,13 +74,12 @@ namespace AppInsights.Telemetry
             telemetryClient.Context.Cloud.RoleInstance = _roleInstance;
         }
 
-        private TelemetryConfiguration CreateTelemetryConfiguration(InstrumentationKey instrumentationKey)
+        private TelemetryConfiguration CreateTelemetryConfiguration(TelemetryInstrumentationKey instrumentationKey)
         {
             var options = new TelemetryConfiguration()
             {
                 ConnectionString = $"InstrumentationKey={instrumentationKey.GetKey()}",
             };
-            options.TelemetryChannel.DeveloperMode = true;
             return options;
         }
     }

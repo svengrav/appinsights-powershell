@@ -14,7 +14,8 @@ PowerShell command used to track traces in application insights.
 
 ```
 Send-AppInsightsTrace [-Message] <String> [-Severity <SeverityLevel>] [[-InstrumentationKey] <Guid>]
- [[-Properties] <Hashtable>] [-RoleName <String>] [-RoleInstance <String>] [<CommonParameters>]
+ [[-Properties] <Hashtable>] [-RoleName <String>] [-RoleInstance <String>] [-ContextLevel <Int32>]
+ [-DisableContext] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -122,8 +123,42 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -ContextLevel
+Defines which level in the call stack is taken into account for the command context.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DisableContext
+Disables the capturing for the PowerShell command context. For instance, if sensitive data would be captured.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
+
+## INPUTS
+
+## OUTPUTS
 
 ## NOTES
 

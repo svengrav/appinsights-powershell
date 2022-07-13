@@ -1,17 +1,20 @@
-﻿using AppInsights.Extensions;
+﻿using AppInsights.Context;
+using AppInsights.Telemetry;
 using Microsoft.ApplicationInsights.DataContracts;
 using System;
 using System.Collections;
 
-namespace AppInsights.Telemetry
+namespace AppInsights.Builders
 {
     public class DependencyTelemetryBuilder
     {
         private readonly DependencyTelemetry _telemetry;
+        private readonly TelemetryCustomDimensions _customDimensions = new TelemetryCustomDimensions();
 
         private DependencyTelemetryBuilder(string dependencyTypeName, string target, string dependencyName, string data)
         {
             _telemetry = new DependencyTelemetry(dependencyTypeName, target, dependencyName, data);
+            _telemetry.Extension = _customDimensions.GetFormatter();
         }
 
         internal static DependencyTelemetryBuilder Create(string dependencyTypeName, string target, string dependencyName, string data)
@@ -20,9 +23,10 @@ namespace AppInsights.Telemetry
         internal DependencyTelemetry Build()
              => _telemetry;
 
-        internal DependencyTelemetryBuilder AddCommandContext(CommandContext commandContext)
+        internal DependencyTelemetryBuilder AddPowerShellContext(PowerShellHostContext hostContext, PowerShellCommandContext commandContext)
         {
-            _telemetry.Extension = commandContext;
+            _customDimensions.AddHostContext(hostContext);
+            _customDimensions.AddCommandContext(commandContext);
             return this;
         }
 
@@ -44,7 +48,6 @@ namespace AppInsights.Telemetry
             return this;
         }
 
-
         internal DependencyTelemetryBuilder AddDuration(TimeSpan duration)
         {
             _telemetry.Duration = duration;
@@ -53,13 +56,13 @@ namespace AppInsights.Telemetry
 
         internal DependencyTelemetryBuilder AddProperties(Hashtable properties)
         {
-            _telemetry.Properties.MergeDictionary(properties.ToPropertyDictionary());
+            _customDimensions.AddProperties(properties);
             return this;
         }
 
-        internal DependencyTelemetryBuilder AddMetrics (Hashtable properties)
+        internal DependencyTelemetryBuilder AddMetrics(Hashtable metrics)
         {
-            _telemetry.Metrics.MergeDictionary(properties.ToMetricDictionary());
+            _customDimensions.AddMetrics(metrics);
             return this;
         }
     }

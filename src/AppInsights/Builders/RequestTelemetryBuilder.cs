@@ -1,17 +1,20 @@
-﻿using AppInsights.Extensions;
+﻿using AppInsights.Context;
+using AppInsights.Telemetry;
 using Microsoft.ApplicationInsights.DataContracts;
 using System;
 using System.Collections;
 
-namespace AppInsights.Telemetry
+namespace AppInsights.Builders
 {
     public class RequestTelemetryBuilder
     {
         private readonly RequestTelemetry _telemetry;
+        private readonly TelemetryCustomDimensions _customDimensions = new TelemetryCustomDimensions();
 
         private RequestTelemetryBuilder(string name, DateTimeOffset startTime, TimeSpan duration, string responseCode, bool success)
         {
             _telemetry = new RequestTelemetry(name, startTime, duration, responseCode, success);
+            _telemetry.Extension = _customDimensions.GetFormatter();
         }
 
         internal static RequestTelemetryBuilder Create(string name, DateTimeOffset startTime, TimeSpan duration, string responseCode, bool success)
@@ -20,13 +23,14 @@ namespace AppInsights.Telemetry
         internal RequestTelemetry Build()
              => _telemetry;
 
-        internal RequestTelemetryBuilder AddCommandContext(CommandContext commandContext)
+        internal RequestTelemetryBuilder AddPowerShellContext(PowerShellHostContext hostContext, PowerShellCommandContext commandContext)
         {
-            _telemetry.Extension = commandContext;
+            _customDimensions.AddHostContext(hostContext);
+            _customDimensions.AddCommandContext(commandContext);
             return this;
         }
 
-        internal RequestTelemetryBuilder AddStartTime(DateTimeOffset timestamp)
+        internal RequestTelemetryBuilder AddTimestamp(DateTimeOffset timestamp)
         {
             _telemetry.Timestamp = timestamp;
             return this;
@@ -44,6 +48,12 @@ namespace AppInsights.Telemetry
             return this;
         }
 
+        internal RequestTelemetryBuilder AddSource(string source)
+        {
+            _telemetry.Source = source;
+            return this;
+        }
+
         internal RequestTelemetryBuilder AddResponseCode(string responseCode)
         {
             _telemetry.ResponseCode = responseCode;
@@ -58,13 +68,19 @@ namespace AppInsights.Telemetry
 
         internal RequestTelemetryBuilder AddProperties(Hashtable properties)
         {
-            _telemetry.Properties.MergeDictionary(properties.ToPropertyDictionary());
+            _customDimensions.AddProperties(properties);
             return this;
         }
 
-        internal RequestTelemetryBuilder AddMetrics (Hashtable properties)
+        internal RequestTelemetryBuilder AddMetrics(Hashtable metrics)
         {
-            _telemetry.Metrics.MergeDictionary(properties.ToMetricDictionary());
+            _customDimensions.AddMetrics(metrics);
+            return this;
+        }
+
+        internal RequestTelemetryBuilder AddUrl(string uri)
+        {
+            _telemetry.Url = new Uri(uri);
             return this;
         }
     }

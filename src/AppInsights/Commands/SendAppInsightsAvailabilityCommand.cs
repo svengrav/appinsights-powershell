@@ -1,10 +1,10 @@
-﻿using AppInsights.Commands;
-using AppInsights.Telemetry;
+﻿using AppInsights.Builders;
 using Microsoft.ApplicationInsights.DataContracts;
 using System;
+using System.Collections;
 using System.Management.Automation;
 
-namespace AppInsights
+namespace AppInsights.Commands
 {
     [Cmdlet(VerbsCommunications.Send, "AppInsightsAvailability")]
     public class SendAppInsightsAvailabilityCommand : AppInsightsBaseCommand
@@ -50,20 +50,25 @@ namespace AppInsights
         public string Message { get; set; }
 
         [Parameter(
+            HelpMessage = "Optional dictionary with custom request metrics."
+        )]
+        public Hashtable Metrics { get; set; } = new Hashtable();
+
+        [Parameter(
             HelpMessage = "Defines whether the process was successfully processed. Default is true."
         )]
-        public bool Success {get; set; } = true;
+        public bool Success { get; set; } = true;
 
         #endregion Parameters
 
         protected override void ProcessRecord()
-        {   
+        {
             try
             {
                 WriteVerbose(BuildTraceVerboseMessage());
                 TelemetryProcessor.TrackAvailability(CreateAvailabilityTelemetry());
-            } 
-            catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 HandleException(ex);
             }
@@ -75,10 +80,12 @@ namespace AppInsights
         private AvailabilityTelemetry CreateAvailabilityTelemetry()
             => AvailabilityTelemetryBuilder
                 .Create(Name, Timestamp, Duration, RunLocation)
+                .AddPowerShellContext(HostContext, CommandContext)
                 .AddId(Id)
                 .AddProperties(Properties)
                 .AddSuccess(Success)
-                .AddCommandContext(CommandContext)
+                .AddMetrics(Metrics)
+                .AddMessage(Message)
                 .Build();
     }
 }

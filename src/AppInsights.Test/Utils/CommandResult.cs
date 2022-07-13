@@ -13,7 +13,7 @@ namespace AppInsights.Test
         public readonly List<ErrorRecord> Errors = new List<ErrorRecord>();
         public readonly List<ProgressRecord> Progresses = new List<ProgressRecord>();
 
-        public IEnumerable<T> Cast<T>() 
+        public IEnumerable<T> Cast<T>()
             => Output.Cast<T>();
     }
 }

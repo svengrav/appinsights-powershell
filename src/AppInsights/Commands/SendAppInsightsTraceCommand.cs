@@ -1,10 +1,9 @@
-﻿using AppInsights.Commands;
-using AppInsights.Telemetry;
+﻿using AppInsights.Builders;
 using Microsoft.ApplicationInsights.DataContracts;
 using System;
 using System.Management.Automation;
 
-namespace AppInsights
+namespace AppInsights.Commands
 {
     [Cmdlet(VerbsCommunications.Send, "AppInsightsTrace")]
     public class SendAppInsightsTraceCommand : AppInsightsBaseCommand
@@ -28,13 +27,13 @@ namespace AppInsights
         #endregion Parameters
 
         protected override void ProcessRecord()
-        {   
+        {
             try
             {
                 WriteVerbose(BuildTraceVerboseMessage());
                 TelemetryProcessor.TrackTrace(CreateTraceTelemetry());
-            } 
-            catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 HandleException(ex);
             }
@@ -46,9 +45,9 @@ namespace AppInsights
         private TraceTelemetry CreateTraceTelemetry()
             => TraceTelemetryBuilder
                 .Create(Message)
+                .AddPowerShellContext(HostContext, CommandContext)
                 .AddProperties(Properties)
                 .AddSeverity(Severity)
-                .AddCommandContext(CommandContext)
                 .Build();
     }
 }

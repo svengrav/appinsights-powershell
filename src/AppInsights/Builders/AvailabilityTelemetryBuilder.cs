@@ -1,17 +1,20 @@
-﻿using AppInsights.Extensions;
+﻿using AppInsights.Context;
+using AppInsights.Telemetry;
 using Microsoft.ApplicationInsights.DataContracts;
 using System;
 using System.Collections;
 
-namespace AppInsights.Telemetry
+namespace AppInsights.Builders
 {
     public class AvailabilityTelemetryBuilder
     {
         private readonly AvailabilityTelemetry _telemetry;
+        private readonly TelemetryCustomDimensions _customDimensions = new TelemetryCustomDimensions();
 
         private AvailabilityTelemetryBuilder(string name, DateTimeOffset timeStamp, TimeSpan duration, string runLocation)
         {
             _telemetry = new AvailabilityTelemetry(name, timeStamp, duration, runLocation, true);
+            _telemetry.Extension = _customDimensions.GetFormatter();
         }
 
         internal static AvailabilityTelemetryBuilder Create(string name, DateTimeOffset timeStamp, TimeSpan duration, string runLocation)
@@ -20,9 +23,10 @@ namespace AppInsights.Telemetry
         internal AvailabilityTelemetry Build()
              => _telemetry;
 
-        internal AvailabilityTelemetryBuilder AddCommandContext(CommandContext commandContext)
+        internal AvailabilityTelemetryBuilder AddPowerShellContext(PowerShellHostContext hostContext, PowerShellCommandContext commandContext)
         {
-            _telemetry.Extension = commandContext;
+            _customDimensions.AddHostContext(hostContext);
+            _customDimensions.AddCommandContext(commandContext);
             return this;
         }
 
@@ -59,13 +63,13 @@ namespace AppInsights.Telemetry
 
         internal AvailabilityTelemetryBuilder AddProperties(Hashtable properties)
         {
-            _telemetry.Properties.MergeDictionary(properties.ToPropertyDictionary());
+            _customDimensions.AddProperties(properties);
             return this;
         }
 
-        internal AvailabilityTelemetryBuilder AddMetrics (Hashtable properties)
+        internal AvailabilityTelemetryBuilder AddMetrics(Hashtable metrics)
         {
-            _telemetry.Metrics.MergeDictionary(properties.ToMetricDictionary());
+            _customDimensions.AddMetrics(metrics);
             return this;
         }
     }

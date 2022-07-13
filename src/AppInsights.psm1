@@ -6,5 +6,5 @@ param (
 
 if($InstrumentationKey) {
     Write-Host "AppInsights: Instrumentation Key was set globally." -ForegroundColor Yellow
-    $Global:InstrumentationKey = $InstrumentationKey
+    $env:AI_INSTRUMENTATION_KEY = $InstrumentationKey
 }

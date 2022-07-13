@@ -1,5 +1,5 @@
 using AppInsights.Exceptions;
-using AppInsights.Utils;
+using AppInsights.Telemetry;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
@@ -7,7 +7,7 @@ namespace AppInsights.Test
 {
     [TestClass]
     [TestCategory("InstrumentationKey")]
-    public class InstrumentationKeyTests
+    public class TelemetryInstrumentationKeyTests
     {
         [TestInitialize]
         public void InitTest()
@@ -23,7 +23,7 @@ namespace AppInsights.Test
             var instrumentationKeyMock = Guid.NewGuid();
 
             // Act
-            var instrumentationKey = new InstrumentationKey(instrumentationKeyMock);
+            var instrumentationKey = new TelemetryInstrumentationKey(instrumentationKeyMock);
 
             // Assert
             Assert.AreEqual(instrumentationKeyMock, instrumentationKey.GetKey());
@@ -38,7 +38,7 @@ namespace AppInsights.Test
             Environment.SetEnvironmentVariable("AI_INSTRUMENTATION_KEY", instrumentationKeyMock.ToString());
 
             // Act
-            var instrumentationKey = new InstrumentationKey(emptyGuid);
+            var instrumentationKey = new TelemetryInstrumentationKey(emptyGuid);
 
             // Assert
             Assert.AreEqual(instrumentationKeyMock, instrumentationKey.GetKey());
@@ -52,7 +52,7 @@ namespace AppInsights.Test
             var emptyGuid = new Guid();
 
             // Act / Assert
-            var invalidException = Assert.ThrowsException<InstrumentationKeyInvalidException>(() => new InstrumentationKey(emptyGuid));
+            var invalidException = Assert.ThrowsException<InvalidInstrumentationKeyException>(() => new TelemetryInstrumentationKey(emptyGuid));
             Assert.AreEqual(exceptionMessage, invalidException.Message);
         }
     }

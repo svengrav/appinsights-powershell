@@ -1,11 +1,10 @@
-﻿using AppInsights.Commands;
-using AppInsights.Telemetry;
+﻿using AppInsights.Builders;
 using Microsoft.ApplicationInsights.DataContracts;
 using System;
 using System.Collections;
 using System.Management.Automation;
 
-namespace AppInsights
+namespace AppInsights.Commands
 {
     [Cmdlet(VerbsCommunications.Send, "AppInsightsEvent")]
     public class SendAppInsightsEventCommand : AppInsightsBaseCommand
@@ -18,6 +17,12 @@ namespace AppInsights
         )]
         [Alias("EventName")]
         public string Name { get; set; }
+
+        [Parameter(
+            HelpMessage = "The datetime when telemetry was recorded. Default is UTC.Now."
+        )]
+        [Alias("StartTime")]
+        public DateTimeOffset Timestamp { get; set; } = DateTimeOffset.UtcNow;
 
         [Parameter(
             HelpMessage = "Optional dictionary with custom metrics."
@@ -44,9 +49,10 @@ namespace AppInsights
         private EventTelemetry CreateEventTelemetry()
             => EventTelemetryBuilder
                 .Create(Name)
+                .AddPowerShellContext(HostContext, CommandContext)
                 .AddProperties(Properties)
+                .AddTimestamp(Timestamp)
                 .AddMetrics(Metrics)
-                .AddCommandContext(CommandContext)
                 .Build();
-    } 
+    }
 }

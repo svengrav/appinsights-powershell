@@ -1,17 +1,20 @@
-﻿using AppInsights.Extensions;
+﻿using AppInsights.Context;
+using AppInsights.Telemetry;
 using Microsoft.ApplicationInsights.DataContracts;
 using System;
 using System.Collections;
 
-namespace AppInsights.Telemetry
+namespace AppInsights.Builders
 {
     public class ExceptionTelemetryBuilder
     {
         private readonly ExceptionTelemetry _telemetry;
+        private readonly TelemetryCustomDimensions _customDimensions = new TelemetryCustomDimensions();
 
         private ExceptionTelemetryBuilder(Exception exception)
         {
             _telemetry = new ExceptionTelemetry(exception);
+            _telemetry.Extension = _customDimensions.GetFormatter();
         }
 
         internal static ExceptionTelemetryBuilder Create(Exception exception)
@@ -20,15 +23,28 @@ namespace AppInsights.Telemetry
         internal ExceptionTelemetry Build()
              => _telemetry;
 
-        internal ExceptionTelemetryBuilder AddCommandContext(CommandContext commandContext)
+        internal ExceptionTelemetryBuilder AddPowerShellContext(PowerShellHostContext hostContext, PowerShellCommandContext commandContext)
         {
-            _telemetry.Extension = commandContext;
+            _customDimensions.AddHostContext(hostContext);
+            _customDimensions.AddCommandContext(commandContext);
             return this;
         }
 
         internal ExceptionTelemetryBuilder AddMessage(string message)
         {
             _telemetry.Message = message;
+            return this;
+        }
+
+        internal ExceptionTelemetryBuilder AddProblemId(string problemId)
+        {
+            _telemetry.ProblemId = problemId;
+            return this;
+        }
+
+        internal ExceptionTelemetryBuilder AddTimestamp(DateTimeOffset timestamp)
+        {
+            _telemetry.Timestamp = timestamp;
             return this;
         }
 
@@ -40,13 +56,13 @@ namespace AppInsights.Telemetry
 
         internal ExceptionTelemetryBuilder AddProperties(Hashtable properties)
         {
-            _telemetry.Properties.MergeDictionary(properties.ToPropertyDictionary());
+            _customDimensions.AddProperties(properties);
             return this;
         }
 
-        internal ExceptionTelemetryBuilder AddMetrics (Hashtable properties)
+        internal ExceptionTelemetryBuilder AddMetrics(Hashtable metrics)
         {
-            _telemetry.Metrics.MergeDictionary(properties.ToMetricDictionary());
+            _customDimensions.AddMetrics(metrics);
             return this;
         }
     }
