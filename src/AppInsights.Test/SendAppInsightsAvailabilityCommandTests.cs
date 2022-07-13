@@ -1,4 +1,5 @@
-﻿using AppInsights.ErrorRecords;
+﻿using AppInsights.Commands;
+using AppInsights.ErrorRecords;
 using AppInsights.Exceptions;
 using AppInsights.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -36,8 +37,6 @@ namespace AppInsights.Test
 
             // Assert
             Assert.AreEqual(availabilityTelemetryMock.Name, telemetryProcessorMock.AvailabilityTelemetry.Name);
-            Assert.AreEqual(availabilityTelemetryMock.Properties.Count, telemetryProcessorMock.AvailabilityTelemetry.Properties.Count);
-            Assert.AreEqual(availabilityTelemetryMock.Metrics.Count, telemetryProcessorMock.AvailabilityTelemetry.Metrics.Count);
             Assert.AreEqual(availabilityTelemetryMock.Duration, telemetryProcessorMock.AvailabilityTelemetry.Duration);
             Assert.AreEqual(availabilityTelemetryMock.Timestamp, telemetryProcessorMock.AvailabilityTelemetry.Timestamp);
             Assert.AreEqual(availabilityTelemetryMock.Message, telemetryProcessorMock.AvailabilityTelemetry.Message);

@@ -84,6 +84,7 @@ namespace AppInsights.Commands
                 .AddProperties(Properties)
                 .AddSuccess(Success)
                 .AddCommandContext(CommandContext)
+                .AddHostContext(HostContext)
                 .AddMetrics(Metrics)
                 .AddMessage(Message)
                 .Build();

@@ -11,5 +11,8 @@ namespace AppInsights.Extensions
     {
         internal static CommandContext GetCommandContext(this PSCmdlet psCmdlet, int contextLevel = 0)
             => new CommandContext(new PowerShellAdapter(psCmdlet), contextLevel);
+
+        internal static HostContext GetHostContext(this PSCmdlet psCmdlet)
+            => new HostContext(new PowerShellAdapter(psCmdlet));
     }
 }

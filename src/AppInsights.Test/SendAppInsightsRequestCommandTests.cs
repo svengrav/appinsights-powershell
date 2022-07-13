@@ -1,4 +1,4 @@
-﻿using AppInsights.Extensions;
+﻿using AppInsights.Commands;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
@@ -41,8 +41,6 @@ namespace AppInsights.Test
             Assert.AreEqual(requestTelemetryMock.Id, telemetryProcessorMock.RequestTelemetry.Id);
             Assert.AreEqual(requestTelemetryMock.Url, telemetryProcessorMock.RequestTelemetry.Url);
             Assert.AreEqual(requestTelemetryMock.Source, telemetryProcessorMock.RequestTelemetry.Source);
-            Assert.AreEqual(requestTelemetryMock.Properties.Count, telemetryProcessorMock.RequestTelemetry.Properties.Count);
-            Assert.AreEqual(requestTelemetryMock.Metrics.Count, telemetryProcessorMock.RequestTelemetry.Metrics.Count);
         }
     }
 }

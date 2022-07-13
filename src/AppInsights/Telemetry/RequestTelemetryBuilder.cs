@@ -1,5 +1,5 @@
 ﻿using AppInsights.Context;
-using AppInsights.Extensions;
+using AppInsights.Utils;
 using Microsoft.ApplicationInsights.DataContracts;
 using System;
 using System.Collections;
@@ -9,10 +9,12 @@ namespace AppInsights.Telemetry
     public class RequestTelemetryBuilder
     {
         private readonly RequestTelemetry _telemetry;
+        private readonly CustomDimensions _customDimensions = new CustomDimensions();
 
         private RequestTelemetryBuilder(string name, DateTimeOffset startTime, TimeSpan duration, string responseCode, bool success)
         {
             _telemetry = new RequestTelemetry(name, startTime, duration, responseCode, success);
+            _telemetry.Extension = _customDimensions;
         }
 
         internal static RequestTelemetryBuilder Create(string name, DateTimeOffset startTime, TimeSpan duration, string responseCode, bool success)
@@ -23,7 +25,13 @@ namespace AppInsights.Telemetry
 
         internal RequestTelemetryBuilder AddCommandContext(CommandContext commandContext)
         {
-            _telemetry.Extension = commandContext;
+            _customDimensions.AddCommandContext(commandContext);
+            return this;
+        }
+
+        internal RequestTelemetryBuilder AddHostContext(HostContext hostContext)
+        {
+            _customDimensions.AddHostContext(hostContext);
             return this;
         }
 
@@ -64,14 +72,14 @@ namespace AppInsights.Telemetry
         }
 
         internal RequestTelemetryBuilder AddProperties(Hashtable properties)
-        {
-            _telemetry.Properties.MergeDictionary(properties.ToPropertyDictionary());
+{
+            _customDimensions.AddProperties(properties);
             return this;
         }
 
-        internal RequestTelemetryBuilder AddMetrics (Hashtable metrics)
+        internal RequestTelemetryBuilder AddMetrics(Hashtable metrics)
         {
-            _telemetry.Metrics.MergeDictionary(metrics.ToMetricDictionary());
+            _customDimensions.AddMetrics(metrics);
             return this;
         }
 

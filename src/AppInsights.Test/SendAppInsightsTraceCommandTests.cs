@@ -1,6 +1,6 @@
-﻿using AppInsights.ErrorRecords;
+﻿using AppInsights.Commands;
+using AppInsights.ErrorRecords;
 using AppInsights.Exceptions;
-using AppInsights.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections;
@@ -38,7 +38,7 @@ namespace AppInsights.Test
 
         [TestMethod]
         [ExpectedException(typeof(HashtableInvalidException))]
-        public void a_valid_trace_telementry_is_invalid_send()
+        public void a_invalid_trace_telementry_is_send()
         {
             // Arrange
             var traceTelemetryMock = TelemetryRepository.CreateTraceTelemetry();

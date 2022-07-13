@@ -1,4 +1,5 @@
-﻿using AppInsights.ErrorRecords;
+﻿using AppInsights.Commands;
+using AppInsights.ErrorRecords;
 using AppInsights.Exceptions;
 using AppInsights.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -37,8 +38,6 @@ namespace AppInsights.Test
 
             // Assert
             Assert.AreEqual(dependencyTelemetryMock.Name, telemetryProcessorMock.DependencyTelemetry.Name);
-            Assert.AreEqual(dependencyTelemetryMock.Properties.Count, telemetryProcessorMock.DependencyTelemetry.Properties.Count);
-            Assert.AreEqual(dependencyTelemetryMock.Metrics.Count, telemetryProcessorMock.DependencyTelemetry.Metrics.Count);
             Assert.AreEqual(dependencyTelemetryMock.Duration, telemetryProcessorMock.DependencyTelemetry.Duration);
             Assert.AreEqual(dependencyTelemetryMock.Data, telemetryProcessorMock.DependencyTelemetry.Data);
             Assert.AreEqual(dependencyTelemetryMock.Target, telemetryProcessorMock.DependencyTelemetry.Target);

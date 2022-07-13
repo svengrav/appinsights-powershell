@@ -1,5 +1,5 @@
 ﻿using AppInsights.Context;
-using AppInsights.Extensions;
+using AppInsights.Utils;
 using Microsoft.ApplicationInsights.DataContracts;
 using System;
 using System.Collections;
@@ -9,10 +9,12 @@ namespace AppInsights.Telemetry
     public class DependencyTelemetryBuilder
     {
         private readonly DependencyTelemetry _telemetry;
+        private readonly CustomDimensions _customDimensions = new CustomDimensions();
 
         private DependencyTelemetryBuilder(string dependencyTypeName, string target, string dependencyName, string data)
         {
             _telemetry = new DependencyTelemetry(dependencyTypeName, target, dependencyName, data);
+            _telemetry.Extension = _customDimensions;
         }
 
         internal static DependencyTelemetryBuilder Create(string dependencyTypeName, string target, string dependencyName, string data)
@@ -23,7 +25,13 @@ namespace AppInsights.Telemetry
 
         internal DependencyTelemetryBuilder AddCommandContext(CommandContext commandContext)
         {
-            _telemetry.Extension = commandContext;
+            _customDimensions.AddCommandContext(commandContext);
+            return this;
+        }
+
+        internal DependencyTelemetryBuilder AddHostContext(HostContext hostContext)
+        {
+            _customDimensions.AddHostContext(hostContext);
             return this;
         }
 
@@ -53,13 +61,13 @@ namespace AppInsights.Telemetry
 
         internal DependencyTelemetryBuilder AddProperties(Hashtable properties)
         {
-            _telemetry.Properties.MergeDictionary(properties.ToPropertyDictionary());
+            _customDimensions.AddProperties(properties);
             return this;
         }
 
-        internal DependencyTelemetryBuilder AddMetrics (Hashtable metrics)
+        internal DependencyTelemetryBuilder AddMetrics(Hashtable metrics)
         {
-            _telemetry.Metrics.MergeDictionary(metrics.ToMetricDictionary());
+            _customDimensions.AddMetrics(metrics);
             return this;
         }
     }

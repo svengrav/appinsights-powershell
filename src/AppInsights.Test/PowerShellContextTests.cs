@@ -1,11 +1,11 @@
-using AppInsights.Extensions;
+using AppInsights.Context;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AppInsights.Test
 {
     [TestClass]
     [TestCategory("CommandContext")]
-    public class CommandContextTests
+    public class PowerShellContextTests
     {
         [TestMethod]
         public void a_command_context_is_created_by_ps_call_stack()
@@ -24,10 +24,20 @@ namespace AppInsights.Test
 
             Assert.IsTrue(commandContext.GetCommandCall(0).Arguments.ContainsKey("Type"));
             Assert.IsTrue(commandContext.GetCommandCall(1).Arguments.ContainsKey("Color"));
+        }
 
-            Assert.AreEqual(powerShellAdapterMock.GetHostCulture(), commandContext.GetHost().Culture);
-            Assert.AreEqual(powerShellAdapterMock.GetHostVersion(), commandContext.GetHost().Version);
-            Assert.AreEqual(powerShellAdapterMock.GetHostName(), commandContext.GetHost().Name);
+        [TestMethod]
+        public void a_host_context_is_valid()
+        {
+            var powerShellAdapterMock = new PowerShellAdapterMock();
+
+            // Act
+            var hostContext = new HostContext(powerShellAdapterMock);
+
+            // Assert
+            Assert.AreEqual(powerShellAdapterMock.GetHostCulture(), hostContext.Culture);
+            Assert.AreEqual(powerShellAdapterMock.GetHostVersion(), hostContext.Version);
+            Assert.AreEqual(powerShellAdapterMock.GetHostName(), hostContext.Name);
 
         }
 

@@ -1,5 +1,5 @@
 ﻿using AppInsights.Context;
-using AppInsights.Extensions;
+using AppInsights.Utils;
 using Microsoft.ApplicationInsights.DataContracts;
 using System;
 using System.Collections;
@@ -9,10 +9,12 @@ namespace AppInsights.Telemetry
     public class AvailabilityTelemetryBuilder
     {
         private readonly AvailabilityTelemetry _telemetry;
+        private readonly CustomDimensions _customDimensions = new CustomDimensions();
 
         private AvailabilityTelemetryBuilder(string name, DateTimeOffset timeStamp, TimeSpan duration, string runLocation)
         {
             _telemetry = new AvailabilityTelemetry(name, timeStamp, duration, runLocation, true);
+            _telemetry.Extension = _customDimensions;
         }
 
         internal static AvailabilityTelemetryBuilder Create(string name, DateTimeOffset timeStamp, TimeSpan duration, string runLocation)
@@ -23,7 +25,13 @@ namespace AppInsights.Telemetry
 
         internal AvailabilityTelemetryBuilder AddCommandContext(CommandContext commandContext)
         {
-            _telemetry.Extension = commandContext;
+            _customDimensions.AddCommandContext(commandContext);
+            return this;
+        }
+
+        internal AvailabilityTelemetryBuilder AddHostContext(HostContext hostContext)
+        {
+            _customDimensions.AddHostContext(hostContext);
             return this;
         }
 
@@ -60,13 +68,13 @@ namespace AppInsights.Telemetry
 
         internal AvailabilityTelemetryBuilder AddProperties(Hashtable properties)
         {
-            _telemetry.Properties.MergeDictionary(properties.ToPropertyDictionary());
+            _customDimensions.AddProperties(properties);
             return this;
         }
 
-        internal AvailabilityTelemetryBuilder AddMetrics (Hashtable properties)
+        internal AvailabilityTelemetryBuilder AddMetrics(Hashtable metrics)
         {
-            _telemetry.Metrics.MergeDictionary(properties.ToMetricDictionary());
+            _customDimensions.AddMetrics(metrics);
             return this;
         }
     }

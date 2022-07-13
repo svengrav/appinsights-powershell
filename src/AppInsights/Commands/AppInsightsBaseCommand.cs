@@ -41,6 +41,8 @@ namespace AppInsights.Commands
 
         internal protected CommandContext CommandContext { get; internal set; }
 
+        internal protected HostContext HostContext { get; internal set; }
+
         internal protected ITelemetryProcessor TelemetryProcessor { get; internal set; }
 
         private InstrumentationKey _instrumentationKey;
@@ -56,7 +58,13 @@ namespace AppInsights.Commands
 
             if (CommandContextNotExists())
                 CreateCommandContext();
+
+            if (HostContextNotExists())
+                CreateHostContext();
         }
+
+        private bool HostContextNotExists()
+            => HostContext is null;
 
         private bool CommandContextNotExists()
             => CommandContext is null;
@@ -76,6 +84,11 @@ namespace AppInsights.Commands
         private void CreateCommandContext()
         {
             CommandContext = this.GetCommandContext(ContextLevel);
+        }
+
+        private void CreateHostContext()
+        {
+            HostContext = this.GetHostContext();
         }
 
         private protected void HandleException(Exception ex)

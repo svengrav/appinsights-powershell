@@ -1,5 +1,5 @@
 ﻿using AppInsights.Context;
-using AppInsights.Extensions;
+using AppInsights.Utils;
 using Microsoft.ApplicationInsights.DataContracts;
 using System.Collections;
 
@@ -7,34 +7,36 @@ namespace AppInsights.Telemetry
 {
     public class TraceTelemetryBuilder
     {
-        private readonly TraceTelemetry _traceTelemetry;
+        private readonly TraceTelemetry _telemetry;
+        private readonly CustomDimensions _customDimensions = new CustomDimensions();
 
         private TraceTelemetryBuilder(string message)
         {
-            _traceTelemetry = new TraceTelemetry(message);
+            _telemetry = new TraceTelemetry(message);
+            _telemetry.Extension = _customDimensions;
         }
 
         internal static TraceTelemetryBuilder Create(string message)
             => new TraceTelemetryBuilder(message);
 
         internal TraceTelemetry Build()
-             => _traceTelemetry;
+             => _telemetry;
 
         internal TraceTelemetryBuilder AddCommandContext(CommandContext commandContext)
         {
-            _traceTelemetry.Extension = commandContext;
+            _customDimensions.AddCommandContext(commandContext);
             return this;
         }
 
         internal TraceTelemetryBuilder AddSeverity(SeverityLevel severity)
         {
-            _traceTelemetry.SeverityLevel = severity;
+            _telemetry.SeverityLevel = severity;
             return this;
         }
 
         internal TraceTelemetryBuilder AddProperties(Hashtable properties)
         {
-            _traceTelemetry.Properties.MergeDictionary(properties.ToPropertyDictionary());
+            _customDimensions.AddProperties(properties);
             return this;
         }
     }
