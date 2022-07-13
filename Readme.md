@@ -10,11 +10,12 @@ The module simplifies the interaction with Application Insights and offers some 
 - [AppInsights - PowerShell Gallery](https://www.powershellgallery.com/packages/AppInsights/)
 
 ## Features
-- Automatic capture of the extended host and command context and its parameters ([Extended PowerShell Context](#Extended PowerShell Context)).
+- Easy to start with ([Quickstart](#quickstart))
 - Natively supports PowerShell hashtables for properties and metrics.
 - Flexibility in the use of the Instrumentation Key. 
   - Enables the Instrumentation Key to be stored as an Environment Variable.
-- Automatic and wide-ranging module tests.
+- Automatic capture of the extended host and command context and its parameters ([Extended PowerShell Context](#extended-powershell-context)).
+- The module has extensive and automatic tests.
 
 ## Quickstart 
 
