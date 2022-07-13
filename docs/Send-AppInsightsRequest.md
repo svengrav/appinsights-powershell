@@ -16,7 +16,7 @@ PowerShell command used to track requests in application insights.
 Send-AppInsightsRequest [-Name] <String> [-Id <String>] -Duration <TimeSpan> [-Timestamp <DateTimeOffset>]
  -ResponseCode <String> [-Source <String>] [-Url <String>] [-Success <Boolean>] [-Metrics <Hashtable>]
  [[-InstrumentationKey] <Guid>] [[-Properties] <Hashtable>] [-RoleName <String>] [-RoleInstance <String>]
- [<CommonParameters>]
+ [-ContextLevel <Int32>] [-DisableContext] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -189,6 +189,36 @@ The datetime when telemetry was recorded. Default is UTC.Now.
 Type: DateTimeOffset
 Parameter Sets: (All)
 Aliases: StartTime
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ContextLevel
+Defines which level in the call stack is taken into account for the command context.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DisableContext
+Disables the capturing for the PowerShell command context. For instance, if sensitive data would be captured.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
 
 Required: False
 Position: Named
