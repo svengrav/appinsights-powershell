@@ -1,4 +1,4 @@
-﻿using AppInsights.Telemetry;
+﻿using AppInsights.Builders;
 using Microsoft.ApplicationInsights.DataContracts;
 using System;
 using System.Collections;
@@ -80,13 +80,13 @@ namespace AppInsights.Commands
         private RequestTelemetry CreateRequestTelemetry()
             => RequestTelemetryBuilder
                 .Create(Name, Timestamp, Duration, ResponseCode, Success)
+                .AddPowerShellContext(HostContext, CommandContext)
                 .AddDuration(Duration)
                 .AddId(Id)
                 .AddUrl(Url)
                 .AddSource(Source)
                 .AddProperties(Properties)
                 .AddMetrics(Metrics)
-                .AddCommandContext(CommandContext)
                 .Build();
     }
 }

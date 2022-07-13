@@ -1,15 +1,15 @@
 ﻿using AppInsights.Context;
-using AppInsights.Utils;
+using AppInsights.Telemetry;
 using Microsoft.ApplicationInsights.DataContracts;
 using System;
 using System.Collections;
 
-namespace AppInsights.Telemetry
+namespace AppInsights.Builders
 {
     public class RequestTelemetryBuilder
     {
         private readonly RequestTelemetry _telemetry;
-        private readonly CustomDimensions _customDimensions = new CustomDimensions();
+        private readonly TelemetryCustomDimensions _customDimensions = new TelemetryCustomDimensions();
 
         private RequestTelemetryBuilder(string name, DateTimeOffset startTime, TimeSpan duration, string responseCode, bool success)
         {
@@ -23,15 +23,10 @@ namespace AppInsights.Telemetry
         internal RequestTelemetry Build()
              => _telemetry;
 
-        internal RequestTelemetryBuilder AddCommandContext(CommandContext commandContext)
-        {
-            _customDimensions.AddCommandContext(commandContext);
-            return this;
-        }
-
-        internal RequestTelemetryBuilder AddHostContext(HostContext hostContext)
+        internal RequestTelemetryBuilder AddPowerShellContext(PowerShellHostContext hostContext, PowerShellCommandContext commandContext)
         {
             _customDimensions.AddHostContext(hostContext);
+            _customDimensions.AddCommandContext(commandContext);
             return this;
         }
 
@@ -72,7 +67,7 @@ namespace AppInsights.Telemetry
         }
 
         internal RequestTelemetryBuilder AddProperties(Hashtable properties)
-{
+        {
             _customDimensions.AddProperties(properties);
             return this;
         }
@@ -83,7 +78,7 @@ namespace AppInsights.Telemetry
             return this;
         }
 
-        internal RequestTelemetryBuilder AddUrl (string uri)
+        internal RequestTelemetryBuilder AddUrl(string uri)
         {
             _telemetry.Url = new Uri(uri);
             return this;

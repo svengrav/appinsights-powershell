@@ -1,4 +1,4 @@
-﻿using AppInsights.Telemetry;
+﻿using AppInsights.Builders;
 using Microsoft.ApplicationInsights.DataContracts;
 using System;
 using System.Collections;
@@ -86,13 +86,13 @@ namespace AppInsights.Commands
         private DependencyTelemetry CreateDependencyTelemetry()
             => DependencyTelemetryBuilder
                 .Create(Type, Target, Name, Data)
+                .AddPowerShellContext(HostContext, CommandContext)
                 .AddStartTime(Timestamp)
                 .AddSuccess(Success)
                 .AddDuration(Duration)
                 .AddResultCode(ResultCode)
                 .AddProperties(Properties)
                 .AddMetrics(Metrics)
-                .AddCommandContext(CommandContext)
                 .Build();
     }
 }

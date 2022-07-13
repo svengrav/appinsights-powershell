@@ -1,48 +1,47 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using AppInsights.Adapters;
 
 namespace AppInsights.Context
 {
-    public class CommandContext
+    public class PowerShellCommandContext
     {
         private readonly IPowerShellAdapter _powerShellAdapter;
 
-        private readonly ICollection<CommandCall> _callStack;
+        private readonly ICollection<PowerShellCommandCall> _callStack;
 
         private int _contextLevel = 0;
 
-        public CommandContext(IPowerShellAdapter powerShellAdapter, int contextLevel = 0)
+        public PowerShellCommandContext(IPowerShellAdapter powerShellAdapter, int contextLevel = 0)
         {
             _contextLevel = contextLevel;
             _powerShellAdapter = powerShellAdapter;
             _callStack = CreateCallStack();
         }
 
-        public CommandCall GetCommandCall(int contextLevel)
+        public PowerShellCommandCall GetCommandCall(int contextLevel)
              => _callStack.ElementAt(contextLevel);
 
-        public CommandCall GetCommandCall()
+        public PowerShellCommandCall GetCommandCall()
             => _callStack.ElementAt(_contextLevel);
 
-        public CommandContext SetCommandLevel(int level)
+        public PowerShellCommandContext SetCommandLevel(int level)
         {
             _contextLevel = level;
             return this;
         }
 
-        private ICollection<CommandCall> CreateCallStack()
+        private ICollection<PowerShellCommandCall> CreateCallStack()
         {
-            var commandCallStack = new Collection<CommandCall>();
+            var commandCallStack = new Collection<PowerShellCommandCall>();
             foreach (var powerShellCall in _powerShellAdapter.GetCallStack())
                 commandCallStack.Add(CreateCommandCall(powerShellCall));
 
             return commandCallStack;
         }
 
-        private static CommandCall CreateCommandCall(PowerShellCommandCall powerShellCall)
-            => new CommandCall(powerShellCall.Command, powerShellCall.ScriptLineNumber)
+        private static PowerShellCommandCall CreateCommandCall(PowerShellStackItem powerShellCall)
+            => new PowerShellCommandCall(powerShellCall.Command, powerShellCall.ScriptLineNumber)
                 .AddArguments(powerShellCall.Arguments);
 
     }

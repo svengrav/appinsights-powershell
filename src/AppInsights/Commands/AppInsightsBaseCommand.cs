@@ -1,9 +1,7 @@
 ﻿using AppInsights.Context;
 using AppInsights.ErrorRecords;
 using AppInsights.Exceptions;
-using AppInsights.Extensions;
 using AppInsights.Telemetry;
-using AppInsights.Utils;
 using System;
 using System.Collections;
 using System.Management.Automation;
@@ -39,13 +37,23 @@ namespace AppInsights.Commands
         )]
         public int ContextLevel { get; set; } = 0;
 
-        internal protected CommandContext CommandContext { get; internal set; }
+        [Parameter(
+            HelpMessage = "Disables the capturing for the PowerShell command context. For instance, if sensitive data would be captured."
+        )]
+        public SwitchParameter DisableContext
+        {
+            get { return _disableContext; }
+            set { _disableContext = value; }
+        }
+        private bool _disableContext;
 
-        internal protected HostContext HostContext { get; internal set; }
+        internal protected PowerShellCommandContext CommandContext { get; internal set; }
+
+        internal protected PowerShellHostContext HostContext { get; internal set; }
 
         internal protected ITelemetryProcessor TelemetryProcessor { get; internal set; }
 
-        private InstrumentationKey _instrumentationKey;
+        private TelemetryInstrumentationKey _instrumentationKey;
 
         protected override void BeginProcessing()
         {
@@ -72,8 +80,9 @@ namespace AppInsights.Commands
         private bool TelemetryProcessorNotExists()
             => TelemetryProcessor is null;
 
-        private void CreateInstrumentationKey() {
-            _instrumentationKey = new InstrumentationKey(InstrumentationKey);
+        private void CreateInstrumentationKey()
+        {
+            _instrumentationKey = new TelemetryInstrumentationKey(InstrumentationKey);
         }
 
         private void CreateTelemetryProcessor()
@@ -83,21 +92,27 @@ namespace AppInsights.Commands
 
         private void CreateCommandContext()
         {
+            if (_disableContext)
+                return;
+
             CommandContext = this.GetCommandContext(ContextLevel);
         }
 
         private void CreateHostContext()
         {
+            if (_disableContext)
+                return;
+
             HostContext = this.GetHostContext();
         }
 
         private protected void HandleException(Exception ex)
         {
-            if(ex is InstrumentationKeyInvalidException)
-                ThrowTerminatingError(new InstrumentationKeyInvalidRecord(ex, this));
+            if (ex is InvalidInstrumentationKeyException)
+                ThrowTerminatingError(new InvalidInstrumentationKeyRecord(ex, this));
 
-            if (ex is HashtableInvalidException)
-                ThrowTerminatingError(new HashtableInvalidRecord(ex, this));
+            if (ex is InvalidHashtableException)
+                ThrowTerminatingError(new InvalidHashtableRecord(ex, this));
         }
 
         internal void Execute()

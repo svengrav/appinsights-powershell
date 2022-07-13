@@ -1,11 +1,6 @@
 ﻿using AppInsights.Commands;
-using AppInsights.ErrorRecords;
-using AppInsights.Exceptions;
-using AppInsights.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections;
-using System.Linq;
 
 namespace AppInsights.Test
 {

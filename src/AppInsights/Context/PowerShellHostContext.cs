@@ -1,8 +1,6 @@
-﻿using AppInsights.Adapters;
-
-namespace AppInsights.Context
+﻿namespace AppInsights.Context
 {
-    public class HostContext
+    public class PowerShellHostContext
     {
         private readonly IPowerShellAdapter _powerShellAdapter;
 
@@ -12,7 +10,7 @@ namespace AppInsights.Context
 
         public readonly string Culture;
 
-        public HostContext(IPowerShellAdapter powerShellAdapter)
+        public PowerShellHostContext(IPowerShellAdapter powerShellAdapter)
         {
             _powerShellAdapter = powerShellAdapter;
             Name = GetHostName();

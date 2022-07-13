@@ -53,9 +53,9 @@ namespace AppInsights.Test.Mocks
             throw new NotImplementedException();
         }
 
-        public void WriteProperty(ISerializableWithWriter value)
+        public void WriteProperty(ISerializableWithWriter serializableWithWriter)
         {
-            throw new NotImplementedException();
+            serializableWithWriter.Serialize(this);
         }
 
         public void WriteProperty(string name, IList<string> items)

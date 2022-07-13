@@ -1,15 +1,15 @@
 ﻿using AppInsights.Context;
-using AppInsights.Utils;
+using AppInsights.Telemetry;
 using Microsoft.ApplicationInsights.DataContracts;
 using System;
 using System.Collections;
 
-namespace AppInsights.Telemetry
+namespace AppInsights.Builders
 {
     public class DependencyTelemetryBuilder
     {
         private readonly DependencyTelemetry _telemetry;
-        private readonly CustomDimensions _customDimensions = new CustomDimensions();
+        private readonly TelemetryCustomDimensions _customDimensions = new TelemetryCustomDimensions();
 
         private DependencyTelemetryBuilder(string dependencyTypeName, string target, string dependencyName, string data)
         {
@@ -23,15 +23,10 @@ namespace AppInsights.Telemetry
         internal DependencyTelemetry Build()
              => _telemetry;
 
-        internal DependencyTelemetryBuilder AddCommandContext(CommandContext commandContext)
-        {
-            _customDimensions.AddCommandContext(commandContext);
-            return this;
-        }
-
-        internal DependencyTelemetryBuilder AddHostContext(HostContext hostContext)
+        internal DependencyTelemetryBuilder AddPowerShellContext(PowerShellHostContext hostContext, PowerShellCommandContext commandContext)
         {
             _customDimensions.AddHostContext(hostContext);
+            _customDimensions.AddCommandContext(commandContext);
             return this;
         }
 

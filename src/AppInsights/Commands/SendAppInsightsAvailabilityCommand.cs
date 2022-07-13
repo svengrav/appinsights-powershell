@@ -1,4 +1,4 @@
-﻿using AppInsights.Telemetry;
+﻿using AppInsights.Builders;
 using Microsoft.ApplicationInsights.DataContracts;
 using System;
 using System.Collections;
@@ -80,11 +80,10 @@ namespace AppInsights.Commands
         private AvailabilityTelemetry CreateAvailabilityTelemetry()
             => AvailabilityTelemetryBuilder
                 .Create(Name, Timestamp, Duration, RunLocation)
+                .AddPowerShellContext(HostContext, CommandContext)
                 .AddId(Id)
                 .AddProperties(Properties)
                 .AddSuccess(Success)
-                .AddCommandContext(CommandContext)
-                .AddHostContext(HostContext)
                 .AddMetrics(Metrics)
                 .AddMessage(Message)
                 .Build();

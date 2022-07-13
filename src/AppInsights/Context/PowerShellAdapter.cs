@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Management.Automation;
 
-namespace AppInsights.Adapters
+namespace AppInsights.Context
 {
     public class PowerShellAdapter : IPowerShellAdapter
     {
@@ -22,9 +22,9 @@ namespace AppInsights.Adapters
         public string GetHostCulture()
             => _psCmdlet.Host.CurrentCulture.ToString();
 
-        public ICollection<PowerShellCommandCall> GetCallStack()
+        public ICollection<PowerShellStackItem> GetCallStack()
         {
-            var commandCallList = new List<PowerShellCommandCall>();
+            var commandCallList = new List<PowerShellStackItem>();
             var powerShellCallStack = _psCmdlet.InvokeCommand.InvokeScript("Get-PSCallStack");
             RemoveGetPSCallStackFromCallStack(powerShellCallStack);
 
@@ -35,17 +35,17 @@ namespace AppInsights.Adapters
         }
 
         private static CallStackFrame CastToCallStackFrame(PSObject callStackFrame)
-            =>(CallStackFrame) callStackFrame.BaseObject;
+            => (CallStackFrame)callStackFrame.BaseObject;
 
         private static void RemoveGetPSCallStackFromCallStack(Collection<PSObject> callStack)
         {
             callStack.RemoveAt(0);
         }
 
-        private PowerShellCommandCall CreatePowerShellCommandCall(CallStackFrame callStackFrame)
-            => new PowerShellCommandCall(GetCommandName(callStackFrame), 
-                GetScriptLineNumber(callStackFrame), 
-                GetLocation(callStackFrame), 
+        private PowerShellStackItem CreatePowerShellCommandCall(CallStackFrame callStackFrame)
+            => new PowerShellStackItem(GetCommandName(callStackFrame),
+                GetScriptLineNumber(callStackFrame),
+                GetLocation(callStackFrame),
                 GetArgumentDictionary(callStackFrame));
 
         private string GetCommandName(CallStackFrame callStackFrame)

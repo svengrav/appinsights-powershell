@@ -2,7 +2,7 @@
 
 namespace AppInsights.Context
 {
-    public class CommandCall
+    public class PowerShellCommandCall
     {
         public readonly string Name;
 
@@ -10,13 +10,13 @@ namespace AppInsights.Context
 
         public IDictionary<string, object> Arguments { get; private set; }
 
-        public CommandCall(string name, int scriptLineNumber = 0)
+        public PowerShellCommandCall(string name, int scriptLineNumber = 0)
         {
             Name = name;
             ScriptLineNumber = scriptLineNumber;
         }
 
-        public CommandCall AddArguments(IDictionary<string, object> arguments)
+        public PowerShellCommandCall AddArguments(IDictionary<string, object> arguments)
         {
             Arguments = arguments;
             return this;

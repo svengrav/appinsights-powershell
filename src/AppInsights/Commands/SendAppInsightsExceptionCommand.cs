@@ -1,4 +1,4 @@
-﻿using AppInsights.Telemetry;
+﻿using AppInsights.Builders;
 using Microsoft.ApplicationInsights.DataContracts;
 using System;
 using System.Collections;
@@ -62,14 +62,15 @@ namespace AppInsights.Commands
             => $"Track Exception (Exception={Exception.Message}; PropertyCount={Properties.Count}; MetricCount={Metrics.Count})";
 
         private ExceptionTelemetry CreateExceptionTelemetry()
-            => ExceptionTelemetryBuilder.Create(Exception)
+            => ExceptionTelemetryBuilder
+                .Create(Exception)
+                .AddPowerShellContext(HostContext, CommandContext)
                 .AddMessage(Message)
                 .AddMetrics(Metrics)
                 .AddProperties(Properties)
                 .AddProblemId(ProblemId)
                 .AddTimestamp(Timestamp)
                 .AddSeverity(Severity)
-                .AddCommandContext(CommandContext)
                 .Build();
     }
 }

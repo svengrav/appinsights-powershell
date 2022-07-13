@@ -10,10 +10,11 @@ namespace AppInsights.Test
         [TestMethod]
         public void a_command_context_is_created_by_ps_call_stack()
         {
+            // Arrange
             var powerShellAdapterMock = new PowerShellAdapterMock();
 
             // Act
-            var commandContext = new CommandContext(powerShellAdapterMock);
+            var commandContext = new PowerShellCommandContext(powerShellAdapterMock);
 
             // Assert
             Assert.AreEqual(powerShellAdapterMock.GetCommandCall(0).Command, commandContext.GetCommandCall().Name);
@@ -29,10 +30,11 @@ namespace AppInsights.Test
         [TestMethod]
         public void a_host_context_is_valid()
         {
+            // Arrange
             var powerShellAdapterMock = new PowerShellAdapterMock();
 
             // Act
-            var hostContext = new HostContext(powerShellAdapterMock);
+            var hostContext = new PowerShellHostContext(powerShellAdapterMock);
 
             // Assert
             Assert.AreEqual(powerShellAdapterMock.GetHostCulture(), hostContext.Culture);

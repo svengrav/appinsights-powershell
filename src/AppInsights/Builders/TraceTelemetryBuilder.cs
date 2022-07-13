@@ -1,14 +1,14 @@
 ﻿using AppInsights.Context;
-using AppInsights.Utils;
+using AppInsights.Telemetry;
 using Microsoft.ApplicationInsights.DataContracts;
 using System.Collections;
 
-namespace AppInsights.Telemetry
+namespace AppInsights.Builders
 {
     public class TraceTelemetryBuilder
     {
         private readonly TraceTelemetry _telemetry;
-        private readonly CustomDimensions _customDimensions = new CustomDimensions();
+        private readonly TelemetryCustomDimensions _customDimensions = new TelemetryCustomDimensions();
 
         private TraceTelemetryBuilder(string message)
         {
@@ -22,8 +22,9 @@ namespace AppInsights.Telemetry
         internal TraceTelemetry Build()
              => _telemetry;
 
-        internal TraceTelemetryBuilder AddCommandContext(CommandContext commandContext)
+        internal TraceTelemetryBuilder AddPowerShellContext(PowerShellHostContext hostContext, PowerShellCommandContext commandContext)
         {
+            _customDimensions.AddHostContext(hostContext);
             _customDimensions.AddCommandContext(commandContext);
             return this;
         }

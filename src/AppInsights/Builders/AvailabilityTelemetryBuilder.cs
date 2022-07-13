@@ -1,15 +1,15 @@
 ﻿using AppInsights.Context;
-using AppInsights.Utils;
+using AppInsights.Telemetry;
 using Microsoft.ApplicationInsights.DataContracts;
 using System;
 using System.Collections;
 
-namespace AppInsights.Telemetry
+namespace AppInsights.Builders
 {
     public class AvailabilityTelemetryBuilder
     {
         private readonly AvailabilityTelemetry _telemetry;
-        private readonly CustomDimensions _customDimensions = new CustomDimensions();
+        private readonly TelemetryCustomDimensions _customDimensions = new TelemetryCustomDimensions();
 
         private AvailabilityTelemetryBuilder(string name, DateTimeOffset timeStamp, TimeSpan duration, string runLocation)
         {
@@ -23,15 +23,10 @@ namespace AppInsights.Telemetry
         internal AvailabilityTelemetry Build()
              => _telemetry;
 
-        internal AvailabilityTelemetryBuilder AddCommandContext(CommandContext commandContext)
-        {
-            _customDimensions.AddCommandContext(commandContext);
-            return this;
-        }
-
-        internal AvailabilityTelemetryBuilder AddHostContext(HostContext hostContext)
+        internal AvailabilityTelemetryBuilder AddPowerShellContext(PowerShellHostContext hostContext, PowerShellCommandContext commandContext)
         {
             _customDimensions.AddHostContext(hostContext);
+            _customDimensions.AddCommandContext(commandContext);
             return this;
         }
 

@@ -1,4 +1,4 @@
-﻿using AppInsights.Adapters;
+﻿using AppInsights.Context;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,14 +6,14 @@ namespace AppInsights.Test
 {
     internal class PowerShellAdapterMock : IPowerShellAdapter
     {
-        public ICollection<PowerShellCommandCall> GetCallStack()
-            => new List<PowerShellCommandCall>()
+        public ICollection<PowerShellStackItem> GetCallStack()
+            => new List<PowerShellStackItem>()
             {
-                new PowerShellCommandCall("New-Tree", 5, "Script", new Dictionary<string, object>()
+                new PowerShellStackItem("New-Tree", 5, "Script", new Dictionary<string, object>()
                 {
                     { "Type", "AppleTree" }
                 }),
-                new PowerShellCommandCall("New-Branch", 10, "Script", new Dictionary<string, object>()
+                new PowerShellStackItem("New-Branch", 10, "Script", new Dictionary<string, object>()
                 {
                     { "Color", "Brown" }
                 })
@@ -28,7 +28,7 @@ namespace AppInsights.Test
         public string GetHostVersion()
             => "5.1.0.0";
 
-        public PowerShellCommandCall GetCommandCall(int index)
+        public PowerShellStackItem GetCommandCall(int index)
             => GetCallStack().ToArray()[index];
     }
 }

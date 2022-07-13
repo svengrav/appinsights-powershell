@@ -1,4 +1,4 @@
-﻿using AppInsights.Telemetry;
+﻿using AppInsights.Builders;
 using Microsoft.ApplicationInsights.DataContracts;
 using System;
 using System.Collections;
@@ -49,10 +49,10 @@ namespace AppInsights.Commands
         private EventTelemetry CreateEventTelemetry()
             => EventTelemetryBuilder
                 .Create(Name)
+                .AddPowerShellContext(HostContext, CommandContext)
                 .AddProperties(Properties)
                 .AddTimestamp(Timestamp)
                 .AddMetrics(Metrics)
-                .AddCommandContext(CommandContext)
                 .Build();
     }
 }

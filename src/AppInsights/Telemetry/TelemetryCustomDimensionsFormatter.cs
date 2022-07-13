@@ -3,15 +3,15 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
-namespace AppInsights.Utils
+namespace AppInsights.Telemetry
 {
-    internal class CustomDimensionsFormatter : IExtension
+    internal class TelemetryCustomDimensionsFormatter : IExtension
     {
         private readonly IDictionary<string, object> _customDimensions = new Dictionary<string, object>();
 
         public IExtension DeepClone() => null;
 
-        public CustomDimensionsFormatter AddCustomProperty(string key, object value)
+        public TelemetryCustomDimensionsFormatter AddCustomProperty(string key, object value)
         {
             _customDimensions.Add(key, value);
             return this;

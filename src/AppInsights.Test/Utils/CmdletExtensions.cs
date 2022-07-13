@@ -1,6 +1,5 @@
 ﻿using AppInsights.Commands;
 using AppInsights.Context;
-using AppInsights.Extensions;
 
 namespace AppInsights.Test
 {
@@ -9,8 +8,8 @@ namespace AppInsights.Test
         public static CommandResult Exec(this AppInsightsBaseCommand cmdlet)
         {
             var commandResults = new CommandResult();
-            cmdlet.CommandContext = new CommandContext(new PowerShellAdapterMock());
-            cmdlet.HostContext = new HostContext(new PowerShellAdapterMock());
+            cmdlet.CommandContext = new PowerShellCommandContext(new PowerShellAdapterMock());
+            cmdlet.HostContext = new PowerShellHostContext(new PowerShellAdapterMock());
             cmdlet.CommandRuntime = new CommandRuntimeMock(commandResults);
             cmdlet.Execute();
 

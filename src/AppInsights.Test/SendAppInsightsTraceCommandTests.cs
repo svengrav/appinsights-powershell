@@ -37,7 +37,7 @@ namespace AppInsights.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(HashtableInvalidException))]
+        [ExpectedException(typeof(InvalidHashtableException))]
         public void a_invalid_trace_telementry_is_send()
         {
             // Arrange
@@ -49,7 +49,7 @@ namespace AppInsights.Test
 
             command.TelemetryProcessor = telemetryProcessorMock;
             command.InstrumentationKey = Guid.NewGuid();
-            command.Properties = new Hashtable() { { new {}, "Property Value 1"} };
+            command.Properties = new Hashtable() { { new { }, "Property Value 1" } };
 
             command.Message = traceTelemetryMock.Message;
             command.Severity = traceTelemetryMock.SeverityLevel.Value;
@@ -58,7 +58,7 @@ namespace AppInsights.Test
             var commandResult = command.Exec();
 
             // Assert
-            Assert.IsTrue(commandResult.Errors.First() is HashtableInvalidRecord);
+            Assert.IsTrue(commandResult.Errors.First() is InvalidHashtableRecord);
         }
     }
 }

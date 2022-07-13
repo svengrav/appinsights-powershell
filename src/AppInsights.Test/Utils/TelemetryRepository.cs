@@ -54,8 +54,8 @@ namespace AppInsights.Test
                 Name = "AppleOrdered",
                 Timestamp = DateTime.MaxValue
             };
-            
-            foreach(var property in PropertiesDictionary)
+
+            foreach (var property in PropertiesDictionary)
                 telemetry.Properties.Add(property);
 
             foreach (var metric in MetricsDictionary)
@@ -136,7 +136,7 @@ namespace AppInsights.Test
                 Id = "AppleId",
                 RunLocation = "AppleShopServer",
                 Message = "Apple Shop Server test was successfull.",
-                Success  = true,
+                Success = true,
                 Timestamp = DateTimeOffset.MaxValue,
                 Duration = new TimeSpan(0, 1, 0),
             };

@@ -1,15 +1,15 @@
 ﻿using AppInsights.Context;
-using AppInsights.Utils;
+using AppInsights.Telemetry;
 using Microsoft.ApplicationInsights.DataContracts;
 using System;
 using System.Collections;
 
-namespace AppInsights.Telemetry
+namespace AppInsights.Builders
 {
     public class EventTelemetryBuilder
     {
         private readonly EventTelemetry _telemetry;
-        private readonly CustomDimensions _customDimensions = new CustomDimensions();
+        private readonly TelemetryCustomDimensions _customDimensions = new TelemetryCustomDimensions();
 
         private EventTelemetryBuilder(string eventName)
         {
@@ -23,15 +23,10 @@ namespace AppInsights.Telemetry
         internal EventTelemetry Build()
              => _telemetry;
 
-        internal EventTelemetryBuilder AddCommandContext(CommandContext commandContext)
-        {
-            _customDimensions.AddCommandContext(commandContext);
-            return this;
-        }
-
-        internal EventTelemetryBuilder AddHostContext(HostContext hostContext)
+        internal EventTelemetryBuilder AddPowerShellContext(PowerShellHostContext hostContext, PowerShellCommandContext commandContext)
         {
             _customDimensions.AddHostContext(hostContext);
+            _customDimensions.AddCommandContext(commandContext);
             return this;
         }
 
@@ -47,7 +42,7 @@ namespace AppInsights.Telemetry
             return this;
         }
 
-        internal EventTelemetryBuilder AddMetrics (Hashtable metrics)
+        internal EventTelemetryBuilder AddMetrics(Hashtable metrics)
         {
             _customDimensions.AddMetrics(metrics);
             return this;

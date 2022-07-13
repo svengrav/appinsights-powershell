@@ -1,4 +1,4 @@
-﻿using AppInsights.Telemetry;
+﻿using AppInsights.Builders;
 using Microsoft.ApplicationInsights.DataContracts;
 using System;
 using System.Management.Automation;
@@ -45,9 +45,9 @@ namespace AppInsights.Commands
         private TraceTelemetry CreateTraceTelemetry()
             => TraceTelemetryBuilder
                 .Create(Message)
+                .AddPowerShellContext(HostContext, CommandContext)
                 .AddProperties(Properties)
                 .AddSeverity(Severity)
-                .AddCommandContext(CommandContext)
                 .Build();
     }
 }

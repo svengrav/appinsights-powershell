@@ -1,15 +1,15 @@
 ﻿using AppInsights.Context;
-using AppInsights.Utils;
+using AppInsights.Telemetry;
 using Microsoft.ApplicationInsights.DataContracts;
 using System;
 using System.Collections;
 
-namespace AppInsights.Telemetry
+namespace AppInsights.Builders
 {
     public class ExceptionTelemetryBuilder
     {
         private readonly ExceptionTelemetry _telemetry;
-        private readonly CustomDimensions _customDimensions = new CustomDimensions();
+        private readonly TelemetryCustomDimensions _customDimensions = new TelemetryCustomDimensions();
 
         private ExceptionTelemetryBuilder(Exception exception)
         {
@@ -23,15 +23,10 @@ namespace AppInsights.Telemetry
         internal ExceptionTelemetry Build()
              => _telemetry;
 
-        internal ExceptionTelemetryBuilder AddCommandContext(CommandContext commandContext)
-        {
-            _customDimensions.AddCommandContext(commandContext);
-            return this;
-        }
-
-        internal ExceptionTelemetryBuilder AddHostContext(HostContext hostContext)
+        internal ExceptionTelemetryBuilder AddPowerShellContext(PowerShellHostContext hostContext, PowerShellCommandContext commandContext)
         {
             _customDimensions.AddHostContext(hostContext);
+            _customDimensions.AddCommandContext(commandContext);
             return this;
         }
 
@@ -60,7 +55,7 @@ namespace AppInsights.Telemetry
         }
 
         internal ExceptionTelemetryBuilder AddProperties(Hashtable properties)
-{
+        {
             _customDimensions.AddProperties(properties);
             return this;
         }

@@ -1,11 +1,8 @@
 ﻿using AppInsights.Commands;
-using AppInsights.ErrorRecords;
-using AppInsights.Exceptions;
-using AppInsights.Extensions;
+using AppInsights.Test.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
 using System;
-using System.Collections;
-using System.Linq;
 
 namespace AppInsights.Test
 {
@@ -25,6 +22,7 @@ namespace AppInsights.Test
             command.TelemetryProcessor = telemetryProcessorMock;
             command.Properties = TelemetryRepository.PropertiesHashtable;
             command.InstrumentationKey = Guid.NewGuid();
+            command.DisableContext = true;
 
             command.Name = availabilityTelemetryMock.Name;
             command.Duration = availabilityTelemetryMock.Duration;
@@ -40,6 +38,33 @@ namespace AppInsights.Test
             Assert.AreEqual(availabilityTelemetryMock.Duration, telemetryProcessorMock.AvailabilityTelemetry.Duration);
             Assert.AreEqual(availabilityTelemetryMock.Timestamp, telemetryProcessorMock.AvailabilityTelemetry.Timestamp);
             Assert.AreEqual(availabilityTelemetryMock.Message, telemetryProcessorMock.AvailabilityTelemetry.Message);
+        }
+
+        [TestMethod]
+        public void a_valid_availiability_trace_with_metrcis_is_sent_successfully()
+        {
+            // Arrange
+            var availabilityTelemetryMock = TelemetryRepository.CreateAvailabilityTelemetry();
+            var telemetryProcessorMock = new TelemetryProcessorMock();
+            var serializationWriterMock = new SerializationWriterMock();
+            var metricJsonString = JsonConvert.SerializeObject(TelemetryRepository.MetricsHashtable);
+
+            var command = new SendAppInsightsAvailabilityCommand();
+
+            command.TelemetryProcessor = telemetryProcessorMock;
+            command.InstrumentationKey = Guid.NewGuid();
+
+            command.Name = availabilityTelemetryMock.Name;
+            command.Metrics = TelemetryRepository.MetricsHashtable;
+
+            // Act
+            command.Exec();
+
+            // Assert
+            telemetryProcessorMock.AvailabilityTelemetry.Extension.Serialize(serializationWriterMock);
+
+            Assert.AreEqual(availabilityTelemetryMock.Name, telemetryProcessorMock.AvailabilityTelemetry.Name);
+            Assert.AreEqual(metricJsonString, serializationWriterMock.StringProperties["custom_metrics"]);
         }
     }
 }

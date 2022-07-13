@@ -1,5 +1,4 @@
 ﻿using AppInsights.Commands;
-using AppInsights.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
