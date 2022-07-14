@@ -1,5 +1,8 @@
+using AppInsights.Commands;
 using AppInsights.Context;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
+using System.Management.Automation;
 
 namespace AppInsights.Test
 {
@@ -8,7 +11,7 @@ namespace AppInsights.Test
     public class PowerShellContextTests
     {
         [TestMethod]
-        public void a_command_context_is_created_by_ps_call_stack()
+        public void command_context_is_created_by_ps_call_stack()
         {
             // Arrange
             var powerShellAdapterMock = new PowerShellAdapterMock();
@@ -28,7 +31,7 @@ namespace AppInsights.Test
         }
 
         [TestMethod]
-        public void a_host_context_is_valid()
+        public void host_context_is_valid()
         {
             // Arrange
             var powerShellAdapterMock = new PowerShellAdapterMock();
@@ -41,6 +44,59 @@ namespace AppInsights.Test
             Assert.AreEqual(powerShellAdapterMock.GetHostVersion(), hostContext.Version);
             Assert.AreEqual(powerShellAdapterMock.GetHostName(), hostContext.Name);
 
+        }
+
+        [TestMethod]
+        public void context_level_is_greater_then_callstack_returns_last_command()
+        {
+            // Arrange
+            var powerShellAdapterMock = new PowerShellAdapterMock();
+
+            // Act
+            var commandContext = new PowerShellCommandContext(powerShellAdapterMock);
+
+            // Assert
+            Assert.AreEqual(powerShellAdapterMock.GetCallStack().Last().Command, commandContext.GetCommandCall(100).Name);
+        }
+
+        [TestMethod]
+        public void context_level_is_negative_returns_first_command()
+        {
+            // Arrange
+            var powerShellAdapterMock = new PowerShellAdapterMock();
+
+            // Act
+            var commandContext = new PowerShellCommandContext(powerShellAdapterMock);
+
+            // Assert
+            Assert.AreEqual(powerShellAdapterMock.GetCallStack().First().Command, commandContext.GetCommandCall(-100).Name);
+        }
+
+
+        [TestMethod]
+        public void command_context_is_empty_if_powershell_innvocation_is_null()
+        {
+            // Arrange
+            var powerShelLAdapter = new PowerShellAdapter(new SendAppInsightsTraceCommand());
+            var commandContext = new PowerShellCommandContext(powerShelLAdapter);
+
+            // Assert
+            Assert.AreEqual("", commandContext.GetCommandCall(0).Name);
+            Assert.AreEqual(0, commandContext.GetCommandCall(0).Arguments.Count);
+            Assert.AreEqual(0, commandContext.GetCommandCall(0).ScriptLineNumber);
+        }
+
+        [TestMethod]
+        public void host_context_is_empty_if_powershell_is_null()
+        {
+            // Arrange
+            var powerShelLAdapter = new PowerShellAdapter(new SendAppInsightsTraceCommand());
+            var hostContext = new PowerShellHostContext(powerShelLAdapter);
+
+            // Assert
+            Assert.AreEqual("", hostContext.Name);
+            Assert.AreEqual("", hostContext.Version);
+            Assert.AreEqual("", hostContext.Culture);
         }
 
     }

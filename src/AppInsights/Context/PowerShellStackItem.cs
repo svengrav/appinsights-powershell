@@ -9,12 +9,12 @@ namespace AppInsights.Context
         public readonly Dictionary<string, object> Arguments;
         public readonly string Location;
 
-        public PowerShellStackItem(string commandName, int scriptLineNumber, string location, Dictionary<string, object> arguments)
+        public PowerShellStackItem(string commandName, int? scriptLineNumber, string location, Dictionary<string, object> arguments)
         {
-            Command = commandName;
-            ScriptLineNumber = scriptLineNumber;
-            Arguments = arguments;
-            Location = location;
+            Command = commandName ?? "";
+            ScriptLineNumber = scriptLineNumber ?? 0;
+            Arguments = arguments ?? new Dictionary<string, object>();
+            Location = location ?? "";
         }
     }
 }
