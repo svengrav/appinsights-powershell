@@ -14,24 +14,34 @@ namespace AppInsights.Context
         }
 
         public string GetHostName()
-            => _psCmdlet.Host.Name;
+            => HasValue(_psCmdlet?.Host?.Name) ? _psCmdlet.Host.Name : "";
 
         public string GetHostVersion()
-            => _psCmdlet.Host.Version.ToString();
+            => HasValue(_psCmdlet?.Host?.Version) ? _psCmdlet.Host.Version.ToString() : "";
 
         public string GetHostCulture()
-            => _psCmdlet.Host.CurrentCulture.ToString();
+            => HasValue(_psCmdlet?.Host?.CurrentCulture) ? _psCmdlet.Host.CurrentCulture.ToString() : "";
 
         public ICollection<PowerShellStackItem> GetCallStack()
         {
-            var commandCallList = new List<PowerShellStackItem>();
-            var powerShellCallStack = _psCmdlet.InvokeCommand.InvokeScript("Get-PSCallStack");
-            RemoveGetPSCallStackFromCallStack(powerShellCallStack);
+            try
+            {
+                var commandCallList = new List<PowerShellStackItem>();
+                var powerShellCallStack = _psCmdlet.InvokeCommand.InvokeScript("Get-PSCallStack");
+                RemoveGetPSCallStackFromCallStack(powerShellCallStack);
 
-            foreach (var psObject in powerShellCallStack)
-                commandCallList.Add(CreatePowerShellCommandCall(CastToCallStackFrame(psObject)));
+                foreach (var psObject in powerShellCallStack)
+                    commandCallList.Add(CreatePowerShellCommandCall(CastToCallStackFrame(psObject)));
 
-            return commandCallList;
+                return commandCallList;
+            } 
+            catch 
+            {
+                return new List<PowerShellStackItem>()
+                {
+                    new PowerShellStackItem("", 0, "", null)
+                };
+            }
         }
 
         private static CallStackFrame CastToCallStackFrame(PSObject callStackFrame)
@@ -49,15 +59,19 @@ namespace AppInsights.Context
                 GetArgumentDictionary(callStackFrame));
 
         private string GetCommandName(CallStackFrame callStackFrame)
-            => callStackFrame.InvocationInfo.MyCommand.Name;
+            => HasValue(callStackFrame?.InvocationInfo?.MyCommand?.Name) ? callStackFrame.InvocationInfo.MyCommand.Name : "";
 
         private int GetScriptLineNumber(CallStackFrame callStackFrame)
-            => callStackFrame.InvocationInfo.ScriptLineNumber;
-
-        private string GetLocation(CallStackFrame callStackFrame)
-            => callStackFrame.GetScriptLocation();
+             => HasValue(callStackFrame?.InvocationInfo?.ScriptLineNumber) ? callStackFrame.InvocationInfo.ScriptLineNumber : 0;
 
         private Dictionary<string, object> GetArgumentDictionary(CallStackFrame callStackFrame)
-            => callStackFrame.InvocationInfo.BoundParameters;
+            => HasValue(callStackFrame?.InvocationInfo?.BoundParameters) ? callStackFrame.InvocationInfo.BoundParameters : new Dictionary<string, object>();
+
+        private string GetLocation(CallStackFrame callStackFrame)
+            => HasValue(callStackFrame) ? callStackFrame.GetScriptLocation() : "";
+
+        private bool HasValue(object value)
+            => value != null;
+
     }
 }
