@@ -20,16 +20,33 @@ namespace AppInsights.Context
         }
 
         public PowerShellCommandCall GetCommandCall(int contextLevel)
-             => _callStack.ElementAt(contextLevel);
+             => GetCommandCallFromStack(contextLevel);
 
         public PowerShellCommandCall GetCommandCall()
-            => _callStack.ElementAt(_contextLevel);
+            => GetCommandCallFromStack(_contextLevel);
 
         public PowerShellCommandContext SetCommandLevel(int level)
         {
             _contextLevel = level;
             return this;
         }
+
+        private PowerShellCommandCall GetCommandCallFromStack(int stackRank)
+        {
+            if (StackRankIsOutOfRange(stackRank))
+                return _callStack.Last();
+
+            if (StackRankIsNegative(stackRank))
+                return _callStack.First();
+
+            return _callStack.ElementAt(stackRank);
+        }
+
+        private bool StackRankIsOutOfRange(int stackRank)
+            => stackRank > _callStack.Count;
+
+        private static bool StackRankIsNegative(int stackRank)
+            => stackRank < 0;
 
         private ICollection<PowerShellCommandCall> CreateCallStack()
         {
