@@ -6,10 +6,11 @@ namespace AppInsights.Context
     {
         public readonly string Command;
         public readonly int ScriptLineNumber;
-        public readonly Dictionary<string, object> Arguments;
         public readonly string Location;
+        public readonly Dictionary<string, object> Arguments;
 
-        public PowerShellStackItem(string commandName, int? scriptLineNumber, string location, Dictionary<string, object> arguments)
+        public PowerShellStackItem(string commandName, int? scriptLineNumber, string location, 
+            Dictionary<string, object> arguments)
         {
             Command = commandName ?? "";
             ScriptLineNumber = scriptLineNumber ?? 0;

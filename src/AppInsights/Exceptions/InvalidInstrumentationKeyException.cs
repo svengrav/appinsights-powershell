@@ -3,7 +3,7 @@
 namespace AppInsights.Exceptions
 {
     /// <summary>
-    /// Exception is thrown if a invalid or missing key is used.
+    /// Exception is thrown if the instrumentation is invalid or missing.
     /// </summary>
     public class InvalidInstrumentationKeyException : Exception
     {

@@ -3,11 +3,8 @@
     public class PowerShellHostContext
     {
         private readonly IPowerShellAdapter _powerShellAdapter;
-
         public readonly string Name;
-
         public readonly string Version;
-
         public readonly string Culture;
 
         public PowerShellHostContext(IPowerShellAdapter powerShellAdapter)
