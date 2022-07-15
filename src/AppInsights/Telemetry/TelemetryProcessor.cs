@@ -11,7 +11,8 @@ namespace AppInsights.Telemetry
         private readonly string _roleName;
         private readonly string _roleInstance;
 
-        public TelemetryProcessor(TelemetryInstrumentationKey instrumentationKey, string roleName = null, string roleInstance = null)
+        public TelemetryProcessor(TelemetryInstrumentationKey instrumentationKey, string roleName = null, 
+            string roleInstance = null)
         {
             _roleName = roleName ?? Environment.MachineName;
             _roleInstance = roleInstance ?? Environment.MachineName;
@@ -75,12 +76,9 @@ namespace AppInsights.Telemetry
         }
 
         private TelemetryConfiguration CreateTelemetryConfiguration(TelemetryInstrumentationKey instrumentationKey)
-        {
-            var options = new TelemetryConfiguration()
+            => new TelemetryConfiguration()
             {
                 ConnectionString = $"InstrumentationKey={instrumentationKey.GetKey()}",
             };
-            return options;
-        }
     }
 }

@@ -7,16 +7,14 @@ namespace AppInsights.Context
     public class PowerShellCommandContext
     {
         private readonly IPowerShellAdapter _powerShellAdapter;
-
         private readonly ICollection<PowerShellCommandCall> _callStack;
-
         private int _contextLevel = 0;
 
         public PowerShellCommandContext(IPowerShellAdapter powerShellAdapter, int contextLevel = 0)
         {
             _contextLevel = contextLevel;
             _powerShellAdapter = powerShellAdapter;
-            _callStack = CreateCallStack();
+            _callStack = GetCallStackFromAdapter();
         }
 
         public PowerShellCommandCall GetCommandCall(int contextLevel)
@@ -25,9 +23,9 @@ namespace AppInsights.Context
         public PowerShellCommandCall GetCommandCall()
             => GetCommandCallFromStack(_contextLevel);
 
-        public PowerShellCommandContext SetCommandLevel(int level)
+        public PowerShellCommandContext SetContextLevel(int contextLevel)
         {
-            _contextLevel = level;
+            _contextLevel = contextLevel;
             return this;
         }
 
@@ -48,7 +46,7 @@ namespace AppInsights.Context
         private static bool StackRankIsNegative(int stackRank)
             => stackRank < 0;
 
-        private ICollection<PowerShellCommandCall> CreateCallStack()
+        private ICollection<PowerShellCommandCall> GetCallStackFromAdapter()
         {
             var commandCallStack = new Collection<PowerShellCommandCall>();
             foreach (var powerShellCall in _powerShellAdapter.GetCallStack())
