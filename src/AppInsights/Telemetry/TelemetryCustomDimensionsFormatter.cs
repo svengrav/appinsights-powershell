@@ -120,7 +120,7 @@ namespace AppInsights.Telemetry
             {
                 NullValueHandling = NullValueHandling.Ignore,
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                MaxDepth = 5
+                MaxDepth = 3
             });
     }
 }

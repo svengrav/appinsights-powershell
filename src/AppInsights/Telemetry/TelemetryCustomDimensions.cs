@@ -1,7 +1,6 @@
 ﻿using AppInsights.Context;
 using AppInsights.Exceptions;
 using Microsoft.ApplicationInsights.Extensibility;
-using System;
 using System.Collections;
 
 namespace AppInsights.Telemetry

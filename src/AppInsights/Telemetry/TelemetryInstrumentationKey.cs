@@ -13,10 +13,10 @@ namespace AppInsights.Telemetry
 
         internal TelemetryInstrumentationKey(Guid instrumentationKey)
         {
-            if (IsEmpty(instrumentationKey))
-                _instrumentationKey = TryGetEnviromentInstrumentationKey();
-            else
+            if (HasValue(instrumentationKey))
                 _instrumentationKey = instrumentationKey;
+            else
+                _instrumentationKey = TryGetEnviromentInstrumentationKey();
         }
 
         private Guid TryGetEnviromentInstrumentationKey()
@@ -30,7 +30,7 @@ namespace AppInsights.Telemetry
         internal Guid GetKey()
             => _instrumentationKey;
 
-        private static bool IsEmpty(Guid instrumentationKey)
-            => instrumentationKey == Guid.Empty;
+        private static bool HasValue(Guid instrumentationKey)
+            => instrumentationKey != Guid.Empty;
     }
 }
