@@ -2,7 +2,7 @@
 Send-AppInsightsTrace -Message "Fruit selected"
 Send-AppInsightsTrace -Message "Fruit selected" -Severity Critical -Properties @{ "Fruit" = "Apple" } -RoleName "My Custom Role"
 Send-AppInsightsTrace -Message "Apples are delicious" -Severity Information -InstrumentationKey $env:AI_INSTRUMENTATION_KEY
-Send-AppInsightsTrace -Message "Apples are delicious" -Severity Information -InstrumentationKey $env:AI_INSTRUMENTATION_KEY -DisableContext
+Send-AppInsightsTrace -Message "Apples are delicious" -Severity Information -InstrumentationKey $env:AI_INSTRUMENTATION_KEY -CaptureCommand
 
 # Exceptions
 Send-AppInsightsException  -Exception ([Exception]::new("Fruit is rotten")) 
@@ -13,7 +13,7 @@ Send-AppInsightsException  -Exception ([Exception]::new("Fruit is rotten")) -Mes
 Send-AppInsightsEvent "AppleOrderd" 
 Send-AppInsightsEvent -EventName "AppleOrderd" -Properties @{ "Fruit" = "Apple";  "Type" = "Granny Smith" } -InstrumentationKey $env:AI_INSTRUMENTATION_KEY
 Send-AppInsightsEvent -EventName "OrangeOrderd" -Properties @{ "Fruit" = "Orange";  "Type" = "Granny Smith" } -Metrics @{ "Weight" = 12 }  -Timestamp (Get-Date)
-Send-AppInsightsEvent -EventName "OrangeOrderd" -ContextLevel 2
+Send-AppInsightsEvent -EventName "OrangeOrderd" -CaptureLevel 2 -CaptureCommand
 
 # Request
 Send-AppInsightsRequest -Name "AppleRequested" -Duration (New-TimeSpan -Seconds 5) -StartTime (Get-Date) -ResponseCode OK -Success $true -InstrumentationKey $env:AI_INSTRUMENTATION_KEY

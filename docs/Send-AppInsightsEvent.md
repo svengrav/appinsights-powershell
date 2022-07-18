@@ -15,7 +15,7 @@ PowerShell command used to track custom events in application insights.
 ```
 Send-AppInsightsEvent -Name <String> [-Timestamp <DateTimeOffset>] [-Metrics <Hashtable>]
  [[-InstrumentationKey] <Guid>] [[-Properties] <Hashtable>] [-RoleName <String>] [-RoleInstance <String>]
- [-ContextLevel <Int32>] [-DisableContext] [<CommonParameters>]
+ [-CaptureLevel <Int32>] [-CaptureCommand] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -120,7 +120,22 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ContextLevel
+### -Timestamp
+The datetime when telemetry was recorded. Default is UTC.Now.
+
+```yaml
+Type: DateTimeOffset
+Parameter Sets: (All)
+Aliases: StartTime
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CaptureLevel
 Defines which level in the call stack is taken into account for the command context.
 
 ```yaml
@@ -135,28 +150,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -DisableContext
+### -CaptureCommand
 Disables the capturing for the PowerShell command context. For instance, if sensitive data would be captured.
 
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
 Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Timestamp
-The datetime when telemetry was recorded. Default is UTC.Now.
-
-```yaml
-Type: DateTimeOffset
-Parameter Sets: (All)
-Aliases: StartTime
 
 Required: False
 Position: Named

@@ -14,8 +14,8 @@ PowerShell command used to track traces in application insights.
 
 ```
 Send-AppInsightsTrace [-Message] <String> [-Severity <SeverityLevel>] [[-InstrumentationKey] <Guid>]
- [[-Properties] <Hashtable>] [-RoleName <String>] [-RoleInstance <String>] [-ContextLevel <Int32>]
- [-DisableContext] [<CommonParameters>]
+ [[-Properties] <Hashtable>] [-RoleName <String>] [-RoleInstance <String>] [-CaptureLevel <Int32>]
+ [-CaptureCommand] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -123,7 +123,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ContextLevel
+### -CaptureLevel
 Defines which level in the call stack is taken into account for the command context.
 
 ```yaml
@@ -138,7 +138,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -DisableContext
+### -CaptureCommand
 Disables the capturing for the PowerShell command context. For instance, if sensitive data would be captured.
 
 ```yaml

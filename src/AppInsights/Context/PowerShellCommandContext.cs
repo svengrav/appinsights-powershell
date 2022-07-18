@@ -10,22 +10,22 @@ namespace AppInsights.Context
         private readonly ICollection<PowerShellCommandCall> _callStack;
         private int _contextLevel = 0;
 
-        public PowerShellCommandContext(IPowerShellAdapter powerShellAdapter, int contextLevel = 0)
+        public PowerShellCommandContext(IPowerShellAdapter powerShellAdapter, int captureLevel = 0)
         {
-            _contextLevel = contextLevel;
+            _contextLevel = captureLevel;
             _powerShellAdapter = powerShellAdapter;
             _callStack = GetCallStackFromAdapter();
         }
 
-        public PowerShellCommandCall GetCommandCall(int contextLevel)
-             => GetCommandCallFromStack(contextLevel);
+        public PowerShellCommandCall GetCommandCall(int captureLevel)
+             => GetCommandCallFromStack(captureLevel);
 
         public PowerShellCommandCall GetCommandCall()
             => GetCommandCallFromStack(_contextLevel);
 
-        public PowerShellCommandContext SetContextLevel(int contextLevel)
+        public PowerShellCommandContext SetContextLevel(int captureLevel)
         {
-            _contextLevel = contextLevel;
+            _contextLevel = captureLevel;
             return this;
         }
 

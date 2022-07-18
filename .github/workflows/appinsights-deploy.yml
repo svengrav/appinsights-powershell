@@ -20,7 +20,7 @@ jobs:
           $Version = [System.Version]::new(1,0,$BuildNo)
           Write-Host "Version: $Version"
 
-          dotnet build .\src\AppInsights -o .\output\$Module\bin
+          dotnet build .\src\AppInsights -o .\output\$Module\bin --configuration Release
 
           New-Item -Path .\output\$Module\ -ItemType Directory -Force
           Copy-Item .\src\$Module.psd1 .\output\$Module\ -Force
@@ -29,8 +29,7 @@ jobs:
           Update-ModuleManifest .\Output\$Module\$Module.psd1 -ModuleVersion $Version
 
       - name: perform tests
-        shell: pwsh
-        run: dotnet test .\src\AppInsights.Test -v q --no-build --logger:"console;verbosity=normal"
+        run: dotnet test .\src\AppInsights.Test --no-restore --verbosity normal
         
       - name: upload artifact
         uses: actions/upload-artifact@v2

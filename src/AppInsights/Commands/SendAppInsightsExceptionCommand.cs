@@ -59,7 +59,7 @@ namespace AppInsights.Commands
         }
 
         private string BuildExceptionVerboseMessage()
-            => $"Track Exception (Exception={Exception.Message}; PropertyCount={Properties.Count}; MetricCount={Metrics.Count})";
+            => $"Track Exception (Exception={Exception?.Message}; PropertyCount={Properties.Count}; MetricCount={Metrics.Count})";
 
         private ExceptionTelemetry CreateExceptionTelemetry()
             => ExceptionTelemetryBuilder

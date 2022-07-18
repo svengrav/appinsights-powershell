@@ -21,7 +21,7 @@ namespace AppInsights.Test
             command.TelemetryProcessor = telemetryProcessorMock;
             command.Properties = TelemetryRepository.PropertiesHashtable;
             command.InstrumentationKey = Guid.NewGuid();
-            command.DisableContext = true;
+            command.CaptureCommand = true;
 
             command.Name = availabilityTelemetryMock.Name;
             command.Duration = availabilityTelemetryMock.Duration;

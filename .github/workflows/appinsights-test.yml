@@ -13,11 +13,9 @@ jobs:
         uses: actions/checkout@v3
 
       - name: build app
-        shell: pwsh
         run: |
           $Module = $env:MODULE_NAME
           dotnet build .\src\AppInsights -o .\output\$Module\bin
           
       - name: perform tests
-        shell: pwsh
-        run: dotnet test .\src\AppInsights.Test -v q --no-build --logger:"console;verbosity=normal"
+        run: dotnet test .\src\AppInsights.Test --verbosity normal

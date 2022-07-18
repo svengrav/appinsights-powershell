@@ -16,7 +16,7 @@ PowerShell command used to track availability events in application insights.
 Send-AppInsightsAvailability [-Name] <String> [-Id] <String> [-Duration] <TimeSpan> [-RunLocation] <String>
  [[-Timestamp] <DateTimeOffset>] [[-Message] <String>] [-Metrics <Hashtable>] [[-Success] <Boolean>]
  [[-InstrumentationKey] <Guid>] [[-Properties] <Hashtable>] [[-RoleName] <String>] [[-RoleInstance] <String>]
- [-ContextLevel <Int32>] [-DisableContext] [<CommonParameters>]
+ [-CaptureLevel <Int32>] [-CaptureCommand] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -201,7 +201,22 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ContextLevel
+### -Metrics
+Optional dictionary with custom request metrics.
+
+```yaml
+Type: Hashtable
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CaptureLevel
 Defines which level in the call stack is taken into account for the command context.
 
 ```yaml
@@ -216,26 +231,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -DisableContext
+### -CaptureCommand
 Disables the capturing for the PowerShell command context. For instance, if sensitive data would be captured.
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Metrics
-Optional dictionary with custom request metrics.
-
-```yaml
-Type: Hashtable
 Parameter Sets: (All)
 Aliases:
 

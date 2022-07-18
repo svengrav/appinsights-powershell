@@ -33,19 +33,21 @@ namespace AppInsights.Commands
         public string RoleInstance { get; set; } = Environment.MachineName;
 
         [Parameter(
+            ParameterSetName = "CaptureCommand",
             HelpMessage = "Defines which level in the call stack is taken into account for the command context."
         )]
-        public int ContextLevel { get; set; } = 0;
+        public int CaptureLevel { get; set; } = 0;
 
         [Parameter(
-            HelpMessage = "Disables the capturing for the PowerShell command context. For instance, if sensitive data would be captured."
+            ParameterSetName = "CaptureCommand",
+            HelpMessage = "Enables the capturing for the PowerShell command context."
         )]
-        public SwitchParameter DisableContext
+        public SwitchParameter CaptureCommand
         {
-            get { return _disableContext; }
-            set { _disableContext = value; }
+            get { return _captureCommand; }
+            set { _captureCommand = value; }
         }
-        private bool _disableContext;
+        private bool _captureCommand;
 
         internal protected PowerShellCommandContext CommandContext { get; internal set; }
 
@@ -65,10 +67,10 @@ namespace AppInsights.Commands
                 CreateTelemetryProcessor();
 
             if (CommandContextNotExists())
-                CreateCommandContext();
+                AddCommandContext();
 
             if (HostContextNotExists())
-                CreateHostContext();
+                AddHostContext();
         }
 
         private bool HostContextNotExists()
@@ -90,19 +92,14 @@ namespace AppInsights.Commands
             TelemetryProcessor = new TelemetryProcessor(_instrumentationKey, RoleName, RoleInstance);
         }
 
-        private void CreateCommandContext()
+        private void AddCommandContext()
         {
-            if (_disableContext)
-                return;
-
-            CommandContext = this.GetCommandContext(ContextLevel);
+            if (_captureCommand)
+                CommandContext = this.GetCommandContext(CaptureLevel);
         }
 
-        private void CreateHostContext()
+        private void AddHostContext()
         {
-            if (_disableContext)
-                return;
-
             HostContext = this.GetHostContext();
         }
 

@@ -15,8 +15,8 @@ PowerShell command used to track exceptions in application insights.
 ```
 Send-AppInsightsException [-Exception] <Exception> [-Metrics <Hashtable>] [-Message <String>]
  [-Timestamp <DateTimeOffset>] [-Severity <SeverityLevel>] [-ProblemId <String>] [[-InstrumentationKey] <Guid>]
- [[-Properties] <Hashtable>] [-RoleName <String>] [-RoleInstance <String>] [-ContextLevel <Int32>]
- [-DisableContext] [<CommonParameters>]
+ [[-Properties] <Hashtable>] [-RoleName <String>] [-RoleInstance <String>] [-CaptureLevel <Int32>]
+ [-CaptureCommand] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -136,36 +136,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ContextLevel
-Defines which level in the call stack is taken into account for the command context.
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DisableContext
-Disables the capturing for the PowerShell command context. For instance, if sensitive data would be captured.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -ProblemId
 The exception problem ID.
 
@@ -203,6 +173,36 @@ The datetime when telemetry was recorded. Default is UTC.Now.
 Type: DateTimeOffset
 Parameter Sets: (All)
 Aliases: StartTime
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CaptureLevel
+Defines which level in the call stack is taken into account for the command context.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CaptureCommand
+Disables the capturing for the PowerShell command context. For instance, if sensitive data would be captured.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
 
 Required: False
 Position: Named

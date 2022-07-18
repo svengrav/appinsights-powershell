@@ -59,12 +59,11 @@ Overview and documentation of currently supported commands.
     with PowerShell 7, there is still a dependency conflict with the current versio (2.20) at the moment. Therefore, the outdated package is currently still used.
 
 ## Extended PowerShell Context
-The context of a command is automatically captured. This means:
+The context of a command is automatically captured if you enable with **-CaptureContext**. This means:
 - Host name, culture and version of the PowerShell runtime are collected.
 - The invoking command and its parameters, arguments and the script line number are captured.
 - Custom properties are also structured and identified by a property prefix.
 - Metrics are structured and identified by a metric prefix.
-- **To disable it use the -DisableContext switch**.
 
 ### Samples
 Here are a few samples for querying the extended context in Application Insights with KUSTO Query Language:

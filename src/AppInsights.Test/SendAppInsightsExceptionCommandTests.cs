@@ -36,5 +36,25 @@ namespace AppInsights.Test
             Assert.AreEqual(exceptionTelemetryMock.SeverityLevel, telemetryProcessorMock.ExceptionTelemetry.SeverityLevel);
             Assert.AreEqual(exceptionTelemetryMock.Timestamp, telemetryProcessorMock.ExceptionTelemetry.Timestamp);
         }
+
+        [TestMethod]
+        public void a_exception_which_is_null_is_successfully_sent()
+        {
+            // Arrange
+            var telemetryProcessorMock = new TelemetryProcessorMock();
+
+            var command = new SendAppInsightsExceptionCommand();
+
+            command.TelemetryProcessor = telemetryProcessorMock;
+            command.InstrumentationKey = Guid.NewGuid();
+
+            command.Exception = null;
+
+            // Act
+            command.Exec();
+
+            // Assert
+            Assert.AreEqual("n/a", telemetryProcessorMock.ExceptionTelemetry.Exception.Message);
+        }
     }
 }
