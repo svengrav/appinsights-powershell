@@ -30,7 +30,11 @@
     Copyright         = '(c) Sven Grav. All rights reserved.'
     
     # Description of the functionality provided by this module
-    Description       = 'PowerShell module that encapsulates the Application Insights Telemetry Client. https://github.com/svengrav/appinsights-powershell'
+    Description       = 'AppInsights is a PowerShell module that provides Cmdlets to send logs and traces to Azure Application Insights.
+    It comes with many helpful features to simplify the usage of Application Insights in PowerShell.
+    
+    Checkout the GitHub repository for documentation and samples => 
+    https://github.com/svengrav/appinsights-powershell'
     
     # Minimum version of the PowerShell engine required by this module
     PowerShellVersion = '5.1'
@@ -85,7 +89,7 @@
         PSData = @{
     
             # Tags applied to this module. These help with module discovery in online galleries.
-            Tags = @('ApplicationInsights', 'Logging', 'Azure', 'Tracing')
+            Tags = @('ApplicationInsights', 'Logging', 'Azure', 'Tracing', 'Logs')
     
             # A URL to the license for this module.
             LicenseUri = 'https://github.com/svengrav/appinsights-powershell/blob/main/LICENSE'
@@ -94,7 +98,7 @@
             ProjectUri = 'https://github.com/svengrav/appinsights-powershell'
     
             # A URL to an icon representing this module.
-            IconUri = 'https://github.com/svengrav/appinsights-powershell/blob/main/docs/Images/AppInsights.svg'
+            IconUri = 'https://raw.githubusercontent.com/svengrav/appinsights-powershell/main/docs/Images/AppInsights200px.png'
     
             # ReleaseNotes of this module
             # ReleaseNotes = ''
@@ -108,5 +112,4 @@
     
     # HelpInfo URI of this module
     HelpInfoURI = 'https://github.com/svengrav/appinsights-powershell/tree/main/docs'
-    
 }
