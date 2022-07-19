@@ -41,13 +41,17 @@ namespace AppInsights.Telemetry
 
         public TelemetryCustomDimensions AddCommandContext(PowerShellCommandContext commandContext)
         {
-            _formatter.AddCustomProperty(COMMAND_CONTEXT_ID, commandContext.GetCommandCall());
+            if (HasValue(commandContext))
+                _formatter.AddCustomProperty(COMMAND_CONTEXT_ID, commandContext.GetCommandCall());
+
             return this;
         }
 
         public TelemetryCustomDimensions AddHostContext(PowerShellHostContext hostContext)
         {
-            _formatter.AddCustomProperty(HOST_CONTEXT_ID, hostContext);
+            if (HasValue(hostContext))
+                _formatter.AddCustomProperty(HOST_CONTEXT_ID, hostContext);
+
             return this;
         }
 
@@ -78,5 +82,8 @@ namespace AppInsights.Telemetry
 
         private static bool HashtableIsNotNullOrEmpty(Hashtable properties)
             => properties != null && properties.Count > 0;
+
+        private static bool HasValue(object instance)
+            => !(instance is null);
     }
 }
