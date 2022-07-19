@@ -49,6 +49,16 @@ namespace AppInsights.Commands
         }
         private bool _captureCommand;
 
+        [Parameter(
+            HelpMessage = "Enables the application insights developer mode."
+        )]
+        public SwitchParameter DeveloperMode
+        {
+            get { return _developerMode; }
+            set { _developerMode = value; }
+        }
+        private bool _developerMode;
+
         internal protected PowerShellCommandContext CommandContext { get; internal set; }
 
         internal protected PowerShellHostContext HostContext { get; internal set; }
@@ -89,7 +99,9 @@ namespace AppInsights.Commands
 
         private void CreateTelemetryProcessor()
         {
-            TelemetryProcessor = new TelemetryProcessor(_instrumentationKey, RoleName, RoleInstance);
+            TelemetryProcessor = new TelemetryProcessor(_instrumentationKey, _developerMode)
+                .SetRoleInstance(RoleInstance)
+                .SetRoleName(RoleName);
         }
 
         private void AddCommandContext()

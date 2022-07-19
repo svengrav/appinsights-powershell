@@ -8,15 +8,22 @@ namespace AppInsights.Telemetry
     internal class TelemetryProcessor : ITelemetryProcessor
     {
         private readonly TelemetryClient _telemetryClient;
-        private readonly string _roleName;
-        private readonly string _roleInstance;
 
-        public TelemetryProcessor(TelemetryInstrumentationKey instrumentationKey, string roleName = null, 
-            string roleInstance = null)
+        public TelemetryProcessor(TelemetryInstrumentationKey instrumentationKey, bool developerMode)
         {
-            _roleName = roleName ?? Environment.MachineName;
-            _roleInstance = roleInstance ?? Environment.MachineName;
-            _telemetryClient = CreateTelemetryClient(instrumentationKey);
+            _telemetryClient = CreateTelemetryClient(instrumentationKey, developerMode);
+        }
+
+        public TelemetryProcessor SetRoleName(string roleName)
+        {
+            _telemetryClient.Context.Cloud.RoleName = roleName;
+            return this;
+        }
+
+        public TelemetryProcessor SetRoleInstance(string roleInstance)
+        {
+            _telemetryClient.Context.Cloud.RoleInstance = roleInstance;
+            return this;
         }
 
         public void TrackAvailability(AvailabilityTelemetry telemetry)
@@ -61,9 +68,9 @@ namespace AppInsights.Telemetry
             _telemetryClient.Flush();
         }
 
-        private TelemetryClient CreateTelemetryClient(TelemetryInstrumentationKey instrumentationKey)
+        private TelemetryClient CreateTelemetryClient(TelemetryInstrumentationKey instrumentationKey, bool developerMode)
         {
-            var telemetryClient = new TelemetryClient(CreateTelemetryConfiguration(instrumentationKey));
+            var telemetryClient = new TelemetryClient(CreateTelemetryConfiguration(instrumentationKey, developerMode));
             AssignTelemetryClientRoles(telemetryClient);
 
             return telemetryClient;
@@ -71,14 +78,16 @@ namespace AppInsights.Telemetry
 
         private void AssignTelemetryClientRoles(TelemetryClient telemetryClient)
         {
-            telemetryClient.Context.Cloud.RoleName = _roleName;
-            telemetryClient.Context.Cloud.RoleInstance = _roleInstance;
+            telemetryClient.Context.Cloud.RoleName = Environment.MachineName;
+            telemetryClient.Context.Cloud.RoleInstance = Environment.MachineName;
         }
 
-        private TelemetryConfiguration CreateTelemetryConfiguration(TelemetryInstrumentationKey instrumentationKey)
-            => new TelemetryConfiguration()
-            {
-                ConnectionString = $"InstrumentationKey={instrumentationKey.GetKey()}",
-            };
+        private TelemetryConfiguration CreateTelemetryConfiguration(TelemetryInstrumentationKey instrumentationKey, bool developerMode)
+        {
+            var telemetryConfiguration = new TelemetryConfiguration();
+            telemetryConfiguration.TelemetryChannel.DeveloperMode = developerMode;
+            telemetryConfiguration.ConnectionString = $"InstrumentationKey={instrumentationKey.GetKey()}";
+            return telemetryConfiguration;
+        }
     }
 }

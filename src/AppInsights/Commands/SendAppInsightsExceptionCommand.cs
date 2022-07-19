@@ -18,14 +18,14 @@ namespace AppInsights.Commands
         public Exception Exception { get; set; }
 
         [Parameter(
-            HelpMessage = "Optional dictionary with custom metrics."
-        )]
-        public Hashtable Metrics { get; set; } = new Hashtable();
-
-        [Parameter(
             HelpMessage = "Set optional exception message."
         )]
         public string Message { get; set; } = "";
+
+        [Parameter(
+            HelpMessage = "Optional dictionary with custom metrics."
+        )]
+        public Hashtable Metrics { get; set; } = new Hashtable();
 
         [Parameter(
             HelpMessage = "The datetime when telemetry was recorded. Default is UTC.Now."
