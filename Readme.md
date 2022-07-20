@@ -52,7 +52,7 @@ Overview and documentation of currently supported commands.
 - [Send-AppInsightsException](./docs/Send-AppInsightsException.md)
 - [Send-AppInsightsAvailability](./docs/Send-AppInsightsAvailability.md)
 - [Send-AppInsightsRequest](./docs/Send-AppInsightsRequest.md)
-- 
+
 ## Notes
 - The module works for PowerShell 5 and PowerShell 7.
 - The module is based on Microsoft.ApplicationInsights (2.18.0). This version is tagged as deprecated but 
