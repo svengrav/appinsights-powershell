@@ -33,13 +33,11 @@ namespace AppInsights.Commands
         public string RoleInstance { get; set; } = Environment.MachineName;
 
         [Parameter(
-            ParameterSetName = "CaptureCommand",
             HelpMessage = "Defines which level in the call stack is taken into account for the command context."
         )]
         public int CaptureLevel { get; set; } = 0;
 
         [Parameter(
-            ParameterSetName = "CaptureCommand",
             HelpMessage = "Enables the capturing for the PowerShell command context."
         )]
         public SwitchParameter CaptureCommand
@@ -48,6 +46,16 @@ namespace AppInsights.Commands
             set { _captureCommand = value; }
         }
         private bool _captureCommand;
+
+        [Parameter(
+            HelpMessage = "Enables the application insights developer mode."
+        )]
+        public SwitchParameter DeveloperMode
+        {
+            get { return _developerMode; }
+            set { _developerMode = value; }
+        }
+        private bool _developerMode;
 
         internal protected PowerShellCommandContext CommandContext { get; internal set; }
 
@@ -89,7 +97,9 @@ namespace AppInsights.Commands
 
         private void CreateTelemetryProcessor()
         {
-            TelemetryProcessor = new TelemetryProcessor(_instrumentationKey, RoleName, RoleInstance);
+            TelemetryProcessor = new TelemetryProcessor(_instrumentationKey, _developerMode)
+                .SetRoleInstance(RoleInstance)
+                .SetRoleName(RoleName);
         }
 
         private void AddCommandContext()

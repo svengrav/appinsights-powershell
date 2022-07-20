@@ -12,11 +12,28 @@ PowerShell command used to track exceptions in application insights.
 
 ## SYNTAX
 
+### Exception
 ```
-Send-AppInsightsException [-Exception] <Exception> [-Metrics <Hashtable>] [-Message <String>]
- [-Timestamp <DateTimeOffset>] [-Severity <SeverityLevel>] [-ProblemId <String>] [[-InstrumentationKey] <Guid>]
- [[-Properties] <Hashtable>] [-RoleName <String>] [-RoleInstance <String>] [-CaptureLevel <Int32>]
- [-CaptureCommand] [<CommonParameters>]
+Send-AppInsightsException [-Exception] <Exception> [[-Message] <String>] [[-Metrics] <Hashtable>]
+ [[-Timestamp] <DateTimeOffset>] [[-Severity] <SeverityLevel>] [[-ProblemId] <String>]
+ [[-InstrumentationKey] <Guid>] [[-Properties] <Hashtable>] [[-RoleName] <String>] [[-RoleInstance] <String>]
+ [-DeveloperMode] [<CommonParameters>]
+```
+
+### ErrorRecord
+```
+Send-AppInsightsException -ErrorRecord <ErrorRecord> [[-Message] <String>] [[-Metrics] <Hashtable>]
+ [[-Timestamp] <DateTimeOffset>] [[-Severity] <SeverityLevel>] [[-ProblemId] <String>]
+ [[-InstrumentationKey] <Guid>] [[-Properties] <Hashtable>] [[-RoleName] <String>] [[-RoleInstance] <String>]
+ [-DeveloperMode] [<CommonParameters>]
+```
+
+### CaptureCommand
+```
+Send-AppInsightsException [[-Message] <String>] [[-Metrics] <Hashtable>] [[-Timestamp] <DateTimeOffset>]
+ [[-Severity] <SeverityLevel>] [[-ProblemId] <String>] [[-InstrumentationKey] <Guid>]
+ [[-Properties] <Hashtable>] [[-RoleName] <String>] [[-RoleInstance] <String>] [[-CaptureLevel] <Int32>]
+ [-CaptureCommand] [-DeveloperMode] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -31,12 +48,42 @@ Send-AppInsightsException -Exception ([Exception]::new("Fruit is rotten")) -Mess
 
 ## PARAMETERS
 
+### -CaptureCommand
+Disables the capturing for the PowerShell command context. For instance, if sensitive data would be captured.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: CaptureCommand
+Aliases:
+
+Required: False
+Position: Benannt
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CaptureLevel
+Defines which level in the call stack is taken into account for the command context.
+
+```yaml
+Type: Int32
+Parameter Sets: CaptureCommand
+Aliases:
+
+Required: False
+Position: Benannt
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Exception
 The exception that is transmitted.
 
 ```yaml
 Type: Exception
-Parameter Sets: (All)
+Parameter Sets: Exception
 Aliases:
 
 Required: True
@@ -61,6 +108,21 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Message
+Set optional message.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Benannt
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Metrics
 Optional dictionary with custom metrics.
 
@@ -70,7 +132,22 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
+Position: Benannt
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProblemId
+The exception problem ID.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Benannt
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -100,7 +177,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
+Position: Benannt
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -115,37 +192,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Message
-Set optional message.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ProblemId
-The exception problem ID.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
+Position: Benannt
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -158,9 +205,10 @@ The message severity (Verbose, Information, Warning, Error, Critical). Default i
 Type: SeverityLevel
 Parameter Sets: (All)
 Aliases:
+Accepted values: Verbose, Information, Warning, Error, Critical
 
 Required: False
-Position: Named
+Position: Benannt
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -175,29 +223,14 @@ Parameter Sets: (All)
 Aliases: StartTime
 
 Required: False
-Position: Named
+Position: Benannt
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -CaptureLevel
-Defines which level in the call stack is taken into account for the command context.
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -CaptureCommand
-Disables the capturing for the PowerShell command context. For instance, if sensitive data would be captured.
+### -DeveloperMode
+Enables the application insights developer mode.
 
 ```yaml
 Type: SwitchParameter
@@ -205,6 +238,21 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ErrorRecord
+The error record that is transmitted.
+
+```yaml
+Type: ErrorRecord
+Parameter Sets: ErrorRecord
+Aliases:
+
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False

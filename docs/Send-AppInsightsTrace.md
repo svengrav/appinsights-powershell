@@ -13,9 +13,9 @@ PowerShell command used to track traces in application insights.
 ## SYNTAX
 
 ```
-Send-AppInsightsTrace [-Message] <String> [-Severity <SeverityLevel>] [[-InstrumentationKey] <Guid>]
- [[-Properties] <Hashtable>] [-RoleName <String>] [-RoleInstance <String>] [-CaptureLevel <Int32>]
- [-CaptureCommand] [<CommonParameters>]
+Send-AppInsightsTrace [-Message] <String> [[-Severity] <SeverityLevel>] [[-InstrumentationKey] <Guid>]
+ [[-Properties] <Hashtable>] [[-RoleName] <String>] [[-RoleInstance] <String>] [[-CaptureLevel] <Int32>]
+ [-CaptureCommand] [-DeveloperMode] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -29,6 +29,36 @@ Send-AppInsightsTrace -Message "Fruit selected" -Severity Critical -Properties @
 ```
 
 ## PARAMETERS
+
+### -CaptureCommand
+Disables the capturing for the PowerShell command context. For instance, if sensitive data would be captured.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Benannt
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CaptureLevel
+Defines which level in the call stack is taken into account for the command context.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Benannt
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -InstrumentationKey
 The Application Insights Instrumentation Key.
@@ -84,7 +114,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
+Position: Benannt
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -99,7 +129,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
+Position: Benannt
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -117,29 +147,14 @@ Aliases:
 Accepted values: Verbose, Information, Warning, Error, Critical
 
 Required: False
-Position: Named
+Position: Benannt
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -CaptureLevel
-Defines which level in the call stack is taken into account for the command context.
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -CaptureCommand
-Disables the capturing for the PowerShell command context. For instance, if sensitive data would be captured.
+### -DeveloperMode
+Enables the application insights developer mode.
 
 ```yaml
 Type: SwitchParameter

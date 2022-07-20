@@ -13,10 +13,11 @@ PowerShell command used to track requests in application insights.
 ## SYNTAX
 
 ```
-Send-AppInsightsRequest [-Name] <String> [-Id <String>] -Duration <TimeSpan> [-Timestamp <DateTimeOffset>]
- -ResponseCode <String> [-Source <String>] [-Url <String>] [-Success <Boolean>] [-Metrics <Hashtable>]
- [[-InstrumentationKey] <Guid>] [[-Properties] <Hashtable>] [-RoleName <String>] [-RoleInstance <String>]
- [-CaptureLevel <Int32>] [-CaptureCommand] [<CommonParameters>]
+Send-AppInsightsRequest [-Name] <String> [[-Id] <String>] [-Duration] <TimeSpan>
+ [[-Timestamp] <DateTimeOffset>] [-ResponseCode] <String> [[-Source] <String>] [[-Url] <String>]
+ [[-Success] <Boolean>] [[-Metrics] <Hashtable>] [[-InstrumentationKey] <Guid>] [[-Properties] <Hashtable>]
+ [[-RoleName] <String>] [[-RoleInstance] <String>] [[-CaptureLevel] <Int32>] [-CaptureCommand] [-DeveloperMode]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -31,6 +32,36 @@ Send-AppInsightsRequest -Name "AppleRequested" -Duration (New-TimeSpan -Seconds 
 
 ## PARAMETERS
 
+### -CaptureCommand
+Disables the capturing for the PowerShell command context. For instance, if sensitive data would be captured.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Benannt
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CaptureLevel
+Defines which level in the call stack is taken into account for the command context.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Benannt
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Duration
 Request duration.
 
@@ -40,7 +71,22 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: Named
+Position: Benannt
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Id
+The Request ID. Default is emtpy.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Benannt
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -56,6 +102,21 @@ Aliases:
 
 Required: False
 Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Metrics
+Optional dictionary with custom metrics.
+
+```yaml
+Type: Hashtable
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Benannt
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -101,7 +162,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: Named
+Position: Benannt
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -116,7 +177,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
+Position: Benannt
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -131,67 +192,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Success
-Defines whether the process was successfully processed.
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Metrics
-Optional dictionary with custom metrics.
-
-```yaml
-Type: Hashtable
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Id
-The Request ID. Default is emtpy.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Timestamp
-The datetime when telemetry was recorded. Default is UTC.Now.
-
-```yaml
-Type: DateTimeOffset
-Parameter Sets: (All)
-Aliases: StartTime
-
-Required: False
-Position: Named
+Position: Benannt
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -206,7 +207,37 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
+Position: Benannt
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Success
+Defines whether the process was successfully processed.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Benannt
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Timestamp
+The datetime when telemetry was recorded. Default is UTC.Now.
+
+```yaml
+Type: DateTimeOffset
+Parameter Sets: (All)
+Aliases: StartTime
+
+Required: False
+Position: Benannt
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -221,29 +252,14 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
+Position: Benannt
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -CaptureLevel
-Defines which level in the call stack is taken into account for the command context.
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -CaptureCommand
-Disables the capturing for the PowerShell command context. For instance, if sensitive data would be captured.
+### -DeveloperMode
+Enables the application insights developer mode.
 
 ```yaml
 Type: SwitchParameter

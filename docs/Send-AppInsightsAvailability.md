@@ -14,9 +14,9 @@ PowerShell command used to track availability events in application insights.
 
 ```
 Send-AppInsightsAvailability [-Name] <String> [-Id] <String> [-Duration] <TimeSpan> [-RunLocation] <String>
- [[-Timestamp] <DateTimeOffset>] [[-Message] <String>] [-Metrics <Hashtable>] [[-Success] <Boolean>]
+ [[-Timestamp] <DateTimeOffset>] [[-Message] <String>] [[-Metrics] <Hashtable>] [[-Success] <Boolean>]
  [[-InstrumentationKey] <Guid>] [[-Properties] <Hashtable>] [[-RoleName] <String>] [[-RoleInstance] <String>]
- [-CaptureLevel <Int32>] [-CaptureCommand] [<CommonParameters>]
+ [[-CaptureLevel] <Int32>] [-CaptureCommand] [-DeveloperMode] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -30,6 +30,36 @@ Send-AppInsightsAvailability -Name "AppleAvailable" -Id  "Apple1" -Duration 2 -R
 ```
 
 ## PARAMETERS
+
+### -CaptureCommand
+Disables the capturing for the PowerShell command context. For instance, if sensitive data would be captured.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Benannt
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CaptureLevel
+Defines which level in the call stack is taken into account for the command context.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Benannt
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -Duration
 The availability test duration.
@@ -81,6 +111,21 @@ Sets optional availability message.
 
 ```yaml
 Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Benannt
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Metrics
+Optional dictionary with custom request metrics.
+
+```yaml
+Type: Hashtable
 Parameter Sets: (All)
 Aliases:
 
@@ -201,38 +246,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Metrics
-Optional dictionary with custom request metrics.
-
-```yaml
-Type: Hashtable
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -CaptureLevel
-Defines which level in the call stack is taken into account for the command context.
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -CaptureCommand
-Disables the capturing for the PowerShell command context. For instance, if sensitive data would be captured.
+### -DeveloperMode
+Enables the application insights developer mode.
 
 ```yaml
 Type: SwitchParameter

@@ -11,21 +11,30 @@ namespace AppInsights.Commands
     {
         #region Parameters
         [Parameter(
-            Position = 0,
             Mandatory = true,
+            ParameterSetName = "Exception",
+            Position = 0,
             HelpMessage = "The exception that is transmitted."
         )]
         public Exception Exception { get; set; }
 
         [Parameter(
-            HelpMessage = "Optional dictionary with custom metrics."
+            Mandatory = true,
+            ParameterSetName = "ErrorRecord",
+            Position = 0,
+            HelpMessage = "The error record that is transmitted."
         )]
-        public Hashtable Metrics { get; set; } = new Hashtable();
+        public ErrorRecord ErrorRecord { get; set; }
 
         [Parameter(
             HelpMessage = "Set optional exception message."
         )]
-        public string Message { get; set; } = "";
+        public string Message { get; set; }
+
+        [Parameter(
+            HelpMessage = "Add optional hashtable with custom metrics."
+        )]
+        public Hashtable Metrics { get; set; } = new Hashtable();
 
         [Parameter(
             HelpMessage = "The datetime when telemetry was recorded. Default is UTC.Now."
@@ -49,6 +58,7 @@ namespace AppInsights.Commands
         {
             try
             {
+                TryGetExceptionFromErrorRecord();
                 WriteVerbose(BuildExceptionVerboseMessage());
                 TelemetryProcessor.TrackException(CreateExceptionTelemetry());
             }
@@ -56,6 +66,12 @@ namespace AppInsights.Commands
             {
                 HandleException(ex);
             }
+        }
+
+        private void TryGetExceptionFromErrorRecord()
+        {
+            if (ErrorRecord != null)
+                Exception = ErrorRecord.Exception;
         }
 
         private string BuildExceptionVerboseMessage()

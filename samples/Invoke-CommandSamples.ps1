@@ -5,7 +5,7 @@ Send-AppInsightsTrace -Message "Apples are delicious" -Severity Information -Ins
 Send-AppInsightsTrace -Message "Apples are delicious" -Severity Information -InstrumentationKey $env:AI_INSTRUMENTATION_KEY -CaptureCommand
 
 # Exceptions
-Send-AppInsightsException  -Exception ([Exception]::new("Fruit is rotten")) 
+Send-AppInsightsException  -Exception ([Exception]::new("Fruit is rotten")) -CaptureCommand -CaptureLevel 1
 Send-AppInsightsException  -Exception ([Exception]::new("Fruit is rotten")) -Message "It is an apple" -Properties @{ "Fruit" = "Apple" } -Metrics @{ "Weight" = 12 } 
 Send-AppInsightsException  -Exception ([Exception]::new("Fruit is rotten")) -Message "Carefull" -Properties @{ "Fruit" = "Apple";  "Type" = "Granny Smith" } -InstrumentationKey $env:AI_INSTRUMENTATION_KEY
 
