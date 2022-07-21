@@ -17,7 +17,10 @@ namespace AppInsights.Context
 
         public PowerShellCommandCall AddArguments(IDictionary<string, object> arguments)
         {
-            foreach(var argument in arguments)
+            if (IsNull(arguments))
+                return this;
+
+            foreach (var argument in arguments)
                 TransformArgumentToPrimitiveType(argument);
 
             return this;
@@ -25,7 +28,9 @@ namespace AppInsights.Context
 
         private void TransformArgumentToPrimitiveType(KeyValuePair<string, object> argument)
         {
-            if (ArgumentIsPrimitive(argument.Value))
+            if (IsNull(argument.Value))
+                Arguments.Add(argument.Key, null);
+            else if (ArgumentIsPrimitive(argument.Value))
                 Arguments.Add(argument.Key, argument.Value);
             else
                 Arguments.Add(argument.Key, argument.Value.ToString());
@@ -33,5 +38,8 @@ namespace AppInsights.Context
 
         private bool ArgumentIsPrimitive(object argumentValue)
             => argumentValue.GetType().IsPrimitive;
+
+        private bool IsNull(object instance)
+            => instance == null;
     }
 }

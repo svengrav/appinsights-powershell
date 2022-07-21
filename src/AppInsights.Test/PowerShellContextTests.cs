@@ -28,8 +28,8 @@ namespace AppInsights.Test
             Assert.AreEqual(powerShellAdapterMock.GetCommandCall(1).Command, commandContext.GetCommandCall(1).Name);
             Assert.AreEqual(powerShellAdapterMock.GetCommandCall(1).ScriptLineNumber, commandContext.GetCommandCall(1).ScriptLineNumber);
 
-            Assert.IsTrue(commandContext.GetCommandCall(0).Arguments.ContainsKey("Type"));
-            Assert.IsTrue(commandContext.GetCommandCall(1).Arguments.ContainsKey("Color"));
+            Assert.AreEqual(commandContext.GetCommandCall(0).Name, powerShellAdapterMock.GetCommandCall(0).Command);
+            Assert.AreEqual(commandContext.GetCommandCall(0).Arguments.Count, powerShellAdapterMock.GetCommandCall(0).Arguments.Count);
         }
 
         [TestMethod]
@@ -74,12 +74,22 @@ namespace AppInsights.Test
             Assert.AreEqual(powerShellAdapterMock.GetCallStack().First().Command, commandContext.GetCommandCall(-100).Name);
         }
 
+        [TestMethod]
+        public void context_level_is_one_more_then_callstack_returns_last_command()
+        {
+            // Arrange
+            var powerShellAdapterMock = new PowerShellAdapterMock(callStackSize: 1);
+            var commandContext = new PowerShellCommandContext(powerShellAdapterMock);
+
+            // Assert
+            Assert.AreEqual(powerShellAdapterMock.GetCallStack().Last().Command, commandContext.GetCommandCall(2).Name);
+        }
 
         [TestMethod]
         public void command_context_is_empty_if_powershell_innvocation_is_null()
         {
             // Arrange
-            var powerShelLAdapter = new PowerShellAdapter(new SendAppInsightsTraceCommand());
+            var powerShelLAdapter = new PowerShellAdapter(null);
             var commandContext = new PowerShellCommandContext(powerShelLAdapter);
 
             // Assert
@@ -92,7 +102,7 @@ namespace AppInsights.Test
         public void host_context_is_empty_if_powershell_is_null()
         {
             // Arrange
-            var powerShelLAdapter = new PowerShellAdapter(new SendAppInsightsTraceCommand());
+            var powerShelLAdapter = new PowerShellAdapter(null);
             var hostContext = new PowerShellHostContext(powerShelLAdapter);
 
             // Assert
@@ -114,8 +124,9 @@ namespace AppInsights.Test
                 { "TimeSpan" , TimeSpan.MaxValue },
                 { "DateTimeOffset" , DateTimeOffset.MaxValue },
                 { "ComplexObject", new { Name = "Name", Adress = new { Street = "Street" } } },
-                { "SwitchParameter", new SwitchParameter(true) }
-
+                { "SwitchParameter", new SwitchParameter(true) },
+                { "Null" , null },
+                { "ComplexObjectWithNull", new { Adress = new { } } },
             });
 
             // Assert
@@ -128,6 +139,17 @@ namespace AppInsights.Test
             Assert.AreEqual(DateTimeOffset.MaxValue.ToString(), powerShellCommandCall.Arguments["DateTimeOffset"]);
             Assert.IsTrue(powerShellCommandCall.Arguments["ComplexObject"] is string);
             Assert.IsTrue(powerShellCommandCall.Arguments["SwitchParameter"] is string);
+        }
+
+        [TestMethod]
+        public void null_in_command_call_has_zero_arguments()
+        {
+            // Arrange
+            var powerShellCommandCall = new PowerShellCommandCall("command_name", 1);
+            powerShellCommandCall.AddArguments(null);
+
+            // Assert
+            Assert.IsTrue(powerShellCommandCall.Arguments.Count == 0);
         }
 
     }

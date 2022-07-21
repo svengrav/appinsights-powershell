@@ -41,7 +41,7 @@ namespace AppInsights.Context
         }
 
         private bool StackRankIsOutOfRange(int stackRank)
-            => stackRank > _callStack.Count;
+            => stackRank > _callStack.Count -1;
 
         private static bool StackRankIsNegative(int stackRank)
             => stackRank < 0;
